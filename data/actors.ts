@@ -1,0 +1,33 @@
+export const ACTOR_TYPES: string[] = [
+  'Workers',
+  'Gig workers',
+  'Applicants',
+  'Migrants',
+  'Refugees',
+  'Residents',
+  'Patients',
+  'Students',
+  'Elderly',
+  'Children',
+  'Disabled persons',
+  'Care workers',
+  'Future generations',
+  'Ecosystems',
+  'Non-human life',
+  'Indigenous communities',
+  'Low-income groups',
+  'Incarcerated persons',
+]
+
+export const ACTOR_STATUS_TYPES: string[] = [
+  'Direct Winner',
+  'Direct Loser',
+  'Hidden Loser',
+  'Delayed Loser',
+  'Short-Term Winner / Long-Term Loser',
+  'Burden Receiver',
+  'Voice-Excluded Subject',
+  'Re-entry Blocked Subject',
+  'Non-Human Affected Subject',
+  'Future Generation Affected Subject',
+]

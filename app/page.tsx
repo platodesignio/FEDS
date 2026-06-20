@@ -3,15 +3,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAudit } from '@/lib/auditContext'
-import PhilosophicalNotice from '@/components/PhilosophicalNotice'
-
-const THEORIES = [
-  { keyEn: 'theory.1.en', keyJa: 'theory.1.ja' },
-  { keyEn: 'theory.2.en', keyJa: 'theory.2.ja' },
-  { keyEn: 'theory.3.en', keyJa: 'theory.3.ja' },
-  { keyEn: 'theory.4.en', keyJa: 'theory.4.ja' },
-  { keyEn: 'theory.5.en', keyJa: 'theory.5.ja' },
-]
 
 export default function Home() {
   const { t, loadDemoCase, demoCases, locale } = useAudit()
@@ -23,118 +14,172 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-12">
-      {/* Hero */}
-      <header className="space-y-3 border-b border-[#e2e8f0] pb-8">
-        <div className="text-xs uppercase tracking-widest text-gray-400">Research Audit Tool</div>
-        <h1 className="text-4xl font-bold tracking-tight text-[#1a3a5c]">FEDS Studio</h1>
-        <p className="text-xl font-medium text-gray-800">Freedom Dialectical Correctness Simulator</p>
-        <p className="text-base text-gray-500">自由弁証法正答率シミュレーター</p>
+    <div className="min-h-screen bg-[#05080f] text-white -mx-6 -mt-6 px-6 pt-6">
 
-        <div className="pt-2">
-          <p className="max-w-3xl text-sm leading-relaxed text-gray-700">
-            {t('app.research_positioning')}
+      {/* Hero */}
+      <header className="max-w-4xl mx-auto pt-20 pb-16 space-y-8">
+        <div className="space-y-2">
+          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#2a5a8a]">
+            Research Audit Tool — Freedom Dialectical Correctness
+          </div>
+          <h1 className="text-6xl font-bold tracking-tight text-white leading-none">
+            FEDS Studio
+          </h1>
+          <p className="text-xl font-light text-[#4a8abb] tracking-wide">
+            Freedom Dialectical Correctness Simulator
+          </p>
+          <p className="text-base text-[#2a5a8a]">自由弁証法正答率シミュレーター</p>
+        </div>
+
+        <p className="text-sm leading-relaxed text-[#6a9aba] max-w-2xl">
+          {t('app.research_positioning')}
+        </p>
+
+        <div className="border-l-2 border-[#1e3a5a] pl-4">
+          <p className="text-sm font-medium text-[#7ac8f8]">
+            {t('app.core_question')}
           </p>
         </div>
 
-        <p className="pt-1 text-sm font-medium text-[#1a3a5c]">
-          {t('app.core_question')}
-        </p>
-
-        <div className="pt-2 flex gap-3 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           <Link
             href="/dashboard"
-            className="inline-block bg-[#1a3a5c] px-6 py-3 text-sm font-medium text-white hover:bg-[#0f2440] transition-colors"
+            className="bg-[#7ac8f8] text-[#05080f] px-6 py-3 text-sm font-bold hover:bg-white transition-colors"
           >
             {t('nav.dashboard')} →
           </Link>
           <Link
             href="/audit"
-            className="inline-block border border-[#1a3a5c] px-6 py-3 text-sm font-medium text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
+            className="border border-[#2a5a8a] px-6 py-3 text-sm font-medium text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors"
           >
             {t('workbench.title')} →
+          </Link>
+          <Link
+            href="/simulation"
+            className="border border-[#1e3a5a] px-6 py-3 text-sm font-medium text-[#2a5a8a] hover:border-[#4a8abb] hover:text-[#4a8abb] transition-colors"
+          >
+            {t('sim.title')} →
           </Link>
         </div>
       </header>
 
-      {/* Philosophical Notices */}
-      <PhilosophicalNotice />
-
-      {/* Theoretical Foundations */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-[#1a3a5c]">{t('theory.section_title')}</h2>
-        <div className="space-y-3">
-          {THEORIES.map((th, i) => (
-            <div key={i} className="border border-[#e2e8f0] p-4">
-              <div className="text-xs font-mono text-gray-400 mb-1">{String(i + 1).padStart(2, '0')}</div>
-              <p className="text-sm font-medium text-gray-800">{t(th.keyEn)}</p>
-              <p className="mt-0.5 text-sm text-gray-500">{t(th.keyJa)}</p>
+      {/* FDCR axis */}
+      <section className="border-t border-[#0f1e30] py-12">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#2a5a8a]">Primary Score Axis</div>
+          <div className="flex items-baseline gap-4 flex-wrap">
+            <span className="text-5xl font-mono font-bold text-[#7ac8f8]">FDCR</span>
+            <div>
+              <div className="text-lg text-white font-light">Freedom Dialectical Correctness Rate</div>
+              <div className="text-sm text-[#2a5a8a]">自由弁証法正答率</div>
             </div>
-          ))}
+          </div>
+          <p className="text-sm leading-relaxed text-[#6a9aba] max-w-2xl">{t('app.description')}</p>
+
+          <div className="grid gap-px bg-[#0f1e30] sm:grid-cols-2 lg:grid-cols-4 border border-[#0f1e30]">
+            {[
+              ['CFCS', 'Creative Future-Challenge Score',    'pos'],
+              ['DER',  'Dialectical Efficacy Rate',          'pos'],
+              ['RCI',  'Return Capacity Index',              'pos'],
+              ['BGR',  'Bodily Generation Rate',             'pos'],
+              ['MSJR', 'Managerial Self-Justification Risk', 'risk'],
+              ['CFR',  'Classification Fixation Risk',       'risk'],
+              ['RBR',  'Re-entry Blockage Risk',             'risk'],
+              ['BTR',  'Burden Transfer Risk',               'risk'],
+            ].map(([abbr, name, type]) => (
+              <div key={abbr} className="bg-[#080e18] px-4 py-3 space-y-0.5">
+                <div className={`font-mono text-xs font-bold ${type === 'pos' ? 'text-[#4ade80]' : 'text-[#f87171]'}`}>
+                  {abbr}
+                </div>
+                <div className="text-[10px] text-[#3a6a8a]">{name}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Demo Cases */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-[#1a3a5c]">{t('demo.section_title')}</h2>
-        <p className="text-sm text-gray-600">{t('demo.description')}</p>
-        <div className="grid gap-4 md:grid-cols-3">
-          {demoCases.map((dc) => (
-            <div key={dc.id} className="border border-[#e2e8f0] p-4 space-y-3">
-              <div className="text-xs uppercase tracking-wide text-gray-400">Demo</div>
-              <h3 className="text-sm font-semibold text-[#1a3a5c]">
-                {locale === 'ja' ? dc.labelJa : dc.label}
-              </h3>
-              <p className="text-xs leading-relaxed text-gray-600">
-                {locale === 'ja' ? dc.descriptionJa : dc.description}
-              </p>
-              <button
-                onClick={() => handleLoadDemo(dc.id)}
-                className="inline-block border border-[#1a3a5c] px-3 py-1.5 text-xs font-medium text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
-              >
-                {t('console.open_case_file')}
-              </button>
-            </div>
-          ))}
+      {/* Ecological extension */}
+      <section className="border-t border-[#0f1e30] py-12">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#2a5a8a]">Ecological Extension Metrics</div>
+          <div className="grid gap-px bg-[#0f1e30] sm:grid-cols-2 lg:grid-cols-4 border border-[#0f1e30]">
+            {[
+              { id: 'E-FDCR',  full: 'Ecological Freedom-Evolution Dialectical Correctness Rate', color: '#4ade80' },
+              { id: 'EBDCR',   full: 'Ecological Bio-Divisional Correctness Rate',                color: '#34d399' },
+              { id: 'EBDE',    full: 'Ecological Bio-Divisional Efficacy',                        color: '#6ee7b7' },
+              { id: 'EP-BTM',  full: 'Eco-Planetary Burden Transfer Matrix',                     color: '#f87171' },
+            ].map(({ id, full, color }) => (
+              <div key={id} className="bg-[#080e18] px-4 py-3 space-y-1">
+                <div className="font-mono text-xs font-bold" style={{ color }}>{id}</div>
+                <div className="text-[10px] text-[#3a6a8a] leading-snug">{full}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Research Use */}
-      <section className="border border-[#e2e8f0] p-6 space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('home.research_use.title')}</h2>
-        <p className="text-sm leading-relaxed text-gray-700 max-w-3xl">{t('home.research_use.audience')}</p>
-        <p className="text-sm leading-relaxed text-gray-700 max-w-3xl">{t('home.research_use.purpose')}</p>
+      {/* Canonical Case Files */}
+      <section className="border-t border-[#0f1e30] py-12">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#2a5a8a]">Canonical Case Files</div>
+          <div className="space-y-px border border-[#0f1e30]">
+            {demoCases.map((dc) => (
+              <div key={dc.id} className="bg-[#080e18] border-b border-[#0f1e30] last:border-0 p-5 flex items-start justify-between gap-4">
+                <div className="space-y-1.5 min-w-0">
+                  <div className="text-[9px] font-mono text-[#2a5a8a] uppercase tracking-widest">
+                    Case File {dc.caseNumber}
+                  </div>
+                  <h3 className="text-sm font-bold text-[#7ac8f8]">
+                    {locale === 'ja' ? dc.labelJa : dc.label}
+                  </h3>
+                  <p className="text-[10px] text-[#3a6a8a] leading-relaxed max-w-xl">
+                    {locale === 'ja' ? dc.centralTensionJa : dc.centralTension}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleLoadDemo(dc.id)}
+                  className="shrink-0 text-[10px] font-mono border border-[#2a5a8a] px-4 py-2 text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors"
+                >
+                  Open Case File →
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* Primary score axis explainer */}
-      <section className="border border-[#e2e8f0] p-6 space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Primary Score Axis</h2>
-        <div className="flex flex-col md:flex-row md:items-baseline gap-2">
-          <span className="text-2xl font-mono font-bold text-[#1a3a5c]">FDCR</span>
-          <span className="text-base text-gray-700">Freedom Dialectical Correctness Rate</span>
-          <span className="text-base text-gray-500">自由弁証法正答率</span>
-        </div>
-        <p className="text-sm leading-relaxed text-gray-700 max-w-3xl">
-          {t('app.description')}
-        </p>
-        <div className="pt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 text-xs text-gray-600">
-          {[
-            ['CFCS', 'Creative Future-Challenge Score'],
-            ['DER', 'Dialectical Efficacy Rate'],
-            ['RCI', 'Return Capacity Index'],
-            ['BGR', 'Bodily Generation Rate'],
-            ['BDER', 'Bio-Divisional Efficacy Rate'],
-            ['DRR', 'Democratic Re-Audit Rate'],
-            ['MSJR', 'Managerial Self-Justification Risk'],
-            ['CFR', 'Classification Fixation Risk'],
-          ].map(([abbr, name]) => (
-            <div key={abbr} className="border border-[#e2e8f0] px-3 py-2">
-              <span className="font-mono font-semibold text-[#1a3a5c]">{abbr}</span>
-              <span className="ml-2 text-gray-500">{name}</span>
-            </div>
-          ))}
+      {/* Methodological axioms */}
+      <section className="border-t border-[#0f1e30] py-12">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#2a5a8a]">Methodological Axioms</div>
+          <div className="space-y-px border border-[#0f1e30]">
+            {[
+              { en: t('theory.1.en'), ja: t('theory.1.ja') },
+              { en: t('theory.2.en'), ja: t('theory.2.ja') },
+              { en: t('theory.3.en'), ja: t('theory.3.ja') },
+              { en: t('theory.4.en'), ja: t('theory.4.ja') },
+              { en: t('theory.5.en'), ja: t('theory.5.ja') },
+            ].map((th, i) => (
+              <div key={i} className="bg-[#080e18] border-b border-[#0f1e30] last:border-0 px-5 py-4 flex gap-4">
+                <span className="font-mono text-[10px] text-[#1e3a5a] shrink-0 pt-0.5 w-5">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <p className="text-xs text-[#7ac8f8] leading-relaxed">{th.en}</p>
+                  <p className="text-[10px] text-[#2a5a8a] mt-0.5 leading-relaxed">{th.ja}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* Footer notice */}
+      <footer className="border-t border-[#0f1e30] py-8">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-[10px] font-mono text-[#1e3a5a] leading-relaxed max-w-2xl">
+            {t('console.notice.no_persons')} {t('console.notice.not_absolute')}
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }

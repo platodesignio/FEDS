@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useAudit } from '@/lib/auditContext'
 import PlanetaryView from '@/components/simulation/PlanetaryView'
@@ -29,6 +29,10 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 export default function SimulationTheaterPage() {
   const { scoreResult, t, locale, demoCases, loadDemoCase } = useAudit()
   const [view, setView] = useState<SimView>('planetary')
+
+  useEffect(() => {
+    if (!scoreResult) loadDemoCase('ai_hiring')
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [scenario, setScenario] = useState<ScenarioId>('current')
   const [timeHorizon, setTimeHorizon] = useState(0)
   const [planetaryLayer, setPlanetaryLayer] = useState('E-FDCR')

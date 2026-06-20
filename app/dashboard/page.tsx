@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useAudit } from '@/lib/auditContext'
 import ScoreCard, { colorForPositive, colorForRisk } from '@/components/ScoreCard'
@@ -395,6 +395,11 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
 export default function ResearchConsolePage() {
   const { scoreResult, t, locale, loadDemoCase, demoCases, auditState } = useAudit()
   const [tab, setTab] = useState(0)
+
+  // Auto-load Case 001 so the console always opens with substantive content
+  useEffect(() => {
+    if (!scoreResult) loadDemoCase('ai_hiring')
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!scoreResult) {
     return (

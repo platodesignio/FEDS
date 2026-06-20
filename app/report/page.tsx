@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { useAudit } from '@/lib/auditContext'
 import ReportView from '@/components/ReportView'
@@ -24,6 +25,11 @@ const DOSSIER_SECTIONS = [
 
 export default function ReportDossierPage() {
   const { scoreResult, t, locale, loadDemoCase, demoCases } = useAudit()
+
+  // Auto-load Case 001 so the dossier always shows substantive content
+  useEffect(() => {
+    if (!scoreResult) loadDemoCase('ai_hiring')
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!scoreResult) {
     return (

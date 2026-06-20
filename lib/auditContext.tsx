@@ -18,6 +18,7 @@ import { generateScenarioResults } from './scenario'
 import { generateReport } from './reportGenerator'
 import { VARIABLES } from '@/data/variables'
 import { QUESTIONS } from '@/data/questions'
+import { DEMO_CASES, DemoCase } from '@/data/demoCases'
 
 export interface ScoreResult {
   metrics: MetricScores
@@ -38,6 +39,8 @@ interface AuditContextValue {
   setAuditState: React.Dispatch<React.SetStateAction<AuditState>>
   scoreResult: ScoreResult | null
   runAudit: () => void
+  loadDemoCase: (id: string) => void
+  demoCases: DemoCase[]
   locale: Locale
   setLocale: (l: Locale) => void
   t: (key: string) => string
@@ -64,6 +67,33 @@ export function AuditProvider({ children }: { children: React.ReactNode }) {
   const [auditState, setAuditState] = useState<AuditState>(defaultState)
   const [scoreResult, setScoreResult] = useState<ScoreResult | null>(null)
   const [locale, setLocale] = useState<Locale>('en')
+
+  const loadDemoCase = useCallback((id: string) => {
+    const demo = DEMO_CASES.find((d) => d.id === id)
+    if (!demo) return
+    // Merge demo variable values with defaults so no key is missing
+    const variableValues: Record<string, number> = {}
+    for (const v of VARIABLES) variableValues[v.id] = v.defaultValue
+    const questionValues: Record<string, number> = {}
+    for (const q of QUESTIONS) questionValues[q.id] = 2
+    const merged: AuditState = {
+      ...demo.state,
+      variableValues: { ...variableValues, ...demo.state.variableValues },
+      questionValues: { ...questionValues, ...demo.state.questionValues },
+    }
+    setAuditState(merged)
+    // Run scoring immediately
+    const metrics = computeMetricScores(merged)
+    const rawFdcr = computeFDCR(metrics)
+    const rawGfdcr = computeGFDCR(metrics, rawFdcr)
+    const corr = applyCorrections(rawFdcr, rawGfdcr, metrics, merged.category)
+    const judgments = determineJudgments(corr.fdcr, corr.gfdcr, metrics, merged.category, corr.corrections)
+    const actorImpacts = computeActorImpacts(merged.subjects, metrics, corr.fdcr)
+    const burdenTransfers = computeBurdenTransfers(metrics, merged.subjects, merged.category)
+    const scenarios = generateScenarioResults(merged, metrics, corr.fdcr, corr.gfdcr)
+    const report = generateReport(merged, metrics, corr.fdcr, corr.gfdcr, judgments, actorImpacts, burdenTransfers, locale)
+    setScoreResult({ metrics, fdcr: corr.fdcr, gfdcr: corr.gfdcr, judgments, corrections: corr.corrections, globalFlags: corr.globalFlags, layerCaps: corr.layerCaps, actorImpacts, burdenTransfers, scenarios, report })
+  }, [locale])
 
   const runAudit = useCallback(() => {
     setAuditState((state) => {
@@ -96,8 +126,8 @@ export function AuditProvider({ children }: { children: React.ReactNode }) {
   const t = useCallback((key: string) => translate(key, locale), [locale])
 
   const value = useMemo<AuditContextValue>(
-    () => ({ auditState, setAuditState, scoreResult, runAudit, locale, setLocale, t }),
-    [auditState, scoreResult, runAudit, locale, t]
+    () => ({ auditState, setAuditState, scoreResult, runAudit, loadDemoCase, demoCases: DEMO_CASES, locale, setLocale, t }),
+    [auditState, scoreResult, runAudit, loadDemoCase, locale, t]
   )
 
   return <AuditContext.Provider value={value}>{children}</AuditContext.Provider>

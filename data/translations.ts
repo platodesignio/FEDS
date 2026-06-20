@@ -7,6 +7,82 @@ import { ACTOR_TYPES } from './actors'
 import { VARIABLE_CATEGORIES } from './variables'
 
 const base: TranslationDict = {
+  // ── Theoretical foundations ──────────────────────────────────────────────
+  'theory.section_title': { en: 'Theoretical Foundations', ja: '理論的基盤' },
+  'theory.1.en': { en: 'Freedom Dialectical Correctness Rate Audit Theory', ja: 'Freedom Dialectical Correctness Rate Audit Theory' },
+  'theory.1.ja': { en: '自由弁証法正答率監査理論', ja: '自由弁証法正答率監査理論' },
+  'theory.2.en': { en: 'Bio-Divisional Dialectical Efficacy Theory', ja: 'Bio-Divisional Dialectical Efficacy Theory' },
+  'theory.2.ja': { en: '生命分業的弁証法効力論', ja: '生命分業的弁証法効力論' },
+  'theory.3.en': { en: 'Bureaucratic Division-of-Labor Metabolic Network Audit Theory through Lifeworld Audit Subjects', ja: 'Bureaucratic Division-of-Labor Metabolic Network Audit Theory through Lifeworld Audit Subjects' },
+  'theory.3.ja': { en: '生活世界監査主体による官僚制分業代謝ネットワーク監査理論', ja: '生活世界監査主体による官僚制分業代謝ネットワーク監査理論' },
+  'theory.4.en': { en: 'Institutional Translation of the Lifeworld, Reality-Generation through Classification, and Democratic Re-Audit of Freedom-Evolution Direction in AI-Scored Society', ja: 'Institutional Translation of the Lifeworld, Reality-Generation through Classification, and Democratic Re-Audit of Freedom-Evolution Direction in AI-Scored Society' },
+  'theory.4.ja': { en: 'AIスコア社会における生活世界の制度的翻訳・分類による現実生成・自由進化方向の民主的再監査', ja: 'AIスコア社会における生活世界の制度的翻訳・分類による現実生成・自由進化方向の民主的再監査' },
+  'theory.5.en': { en: 'Dialectical Social Audit Philosophy for Freedom-Generation in the Age of AI', ja: 'Dialectical Social Audit Philosophy for Freedom-Generation in the Age of AI' },
+  'theory.5.ja': { en: 'AI時代の自由生成社会監査構想――スコア社会・教育・経済・生命分業・認識的不正義を統合する弁証法的自由監査哲学', ja: 'AI時代の自由生成社会監査構想――スコア社会・教育・経済・生命分業・認識的不正義を統合する弁証法的自由監査哲学' },
+  // ── Research tool positioning ────────────────────────────────────────────
+  'app.research_positioning': {
+    en: 'FEDS Studio is a research audit tool for evaluating whether policies, institutions, AI-scored systems, educational systems, economic arrangements, urban systems, ecological systems, and global infrastructures remain creatively future-challenging while preserving the dialectical correctness of freedom-generation.',
+    ja: 'FEDS Studioは、政策・制度・AIスコアシステム・教育システム・経済的配置・都市システム・生態系・グローバルインフラが、自由生成の弁証法的正答性を維持しながら創造的未来挑戦性を保持しているかを評価するための研究監査ツールです。',
+  },
+  'app.core_question': {
+    en: 'Who gains freedom, who loses re-entry, and where is the burden transferred?',
+    ja: '誰が自由を得て、誰が再参入を失い、負担はどこへ転嫁されているか？',
+  },
+  // ── Demo cases ──────────────────────────────────────────────────────────
+  'demo.section_title': { en: 'Demo Audit Cases', ja: 'デモ監査ケース' },
+  'demo.load': { en: 'Load Demo Case', ja: 'デモケースを読み込む' },
+  'demo.description': {
+    en: 'Load a pre-configured audit case to explore how FDCR is computed and reported.',
+    ja: '事前設定された監査ケースを読み込み、FDCRの算出とレポートの仕組みを確認できます。',
+  },
+  'demo.ai_hiring.label': { en: 'AI Hiring System', ja: 'AI採用システム' },
+  'demo.smart_city.label': { en: 'Smart City Surveillance Policy', ja: 'スマートシティ監視政策' },
+  'demo.welfare.label': { en: 'Public Welfare Scoring System', ja: '公的福祉スコアリングシステム' },
+  // ── Dashboard empty state ────────────────────────────────────────────────
+  'dashboard.empty.title': { en: 'No Audit Data', ja: '監査データなし' },
+  'dashboard.empty.body': {
+    en: 'Run a new audit or load a demo case to see FDCR, G-FDCR, metric cards, Actor Impact Matrix, Burden Transfer Matrix, and a full written report.',
+    ja: '新しい監査を実行するか、デモケースを読み込んでFDCR・G-FDCR・指標カード・当事者影響マトリクス・負担転嫁マトリクス・完全レポートを確認してください。',
+  },
+  // ── Report empty state ───────────────────────────────────────────────────
+  'report.empty.title': { en: 'No Audit Report', ja: '監査レポートなし' },
+  'report.empty.body': {
+    en: 'Complete an audit to generate a full written report with 25 sections covering FDCR judgment, actor impacts, burden transfer, improvement conditions, and final conclusion.',
+    ja: '監査を完了すると、FDCRの判定・当事者影響・負担転嫁・改善条件・最終結論を含む全25セクションの完全レポートが生成されます。',
+  },
+  // ── Settings ─────────────────────────────────────────────────────────────
+  'settings.language': { en: 'Language / 言語', ja: '言語' },
+  'settings.weights': { en: 'Scoring Weights', ja: 'スコアリングウェイト' },
+  'settings.weights.note': {
+    en: 'All weights are provisional heuristic values. They can be recalibrated through expert review, case studies, and empirical validation.',
+    ja: 'すべてのウェイトは暫定的なヒューリスティック値です。専門家レビュー・ケーススタディ・実証的検証を通じて再較正可能です。',
+  },
+  'settings.research_assumptions': { en: 'Research Assumptions', ja: '研究前提' },
+  'settings.research_assumptions.note': {
+    en: 'FDCR is not a universal truth score. It operates under explicit assumptions about what constitutes freedom-generation, dialectical efficacy, and institutional correctness. These assumptions are revisable.',
+    ja: 'FDCRは普遍的な真実スコアではありません。自由生成・弁証法的効力・制度的正答性の定義に関する明示的な前提の下で機能します。これらの前提は改訂可能です。',
+  },
+  'settings.export': { en: 'Export Settings', ja: 'エクスポート設定' },
+  'settings.methodological_notes': { en: 'Methodological Notes', ja: '方法論的注記' },
+  'settings.methodological_notes.content': {
+    en: 'FEDS Studio uses a weighted composite scoring model. Variables contribute to metrics through affectedMetrics references. Correction rules apply hard caps to FDCR and G-FDCR when critical thresholds are breached. Judgment categories are assigned based on metric threshold combinations. Actor impacts are estimated from metric values with actor-type-specific modifiers. All outputs are operational audit indicators, not causal measurements.',
+    ja: 'FEDS Studioは重み付き複合スコアリングモデルを使用します。変数はaffectedMetrics参照を通じて指標に寄与します。修正ルールは、重要な閾値が超過した際にFDCRおよびG-FDCRに上限を適用します。判定カテゴリは指標閾値の組み合わせに基づいて割り当てられます。当事者影響は指標値と主体タイプ固有の修正係数から推定されます。すべての出力は操作的監査指標であり、因果的測定値ではありません。',
+  },
+  'settings.debug': { en: 'Debug: Raw Audit State', ja: 'デバッグ：監査状態ロー' },
+  // ── Dashboard section headings ────────────────────────────────────────────
+  'dashboard.corrections': { en: 'Corrections Applied', ja: '適用された修正' },
+  'dashboard.judgments': { en: 'Judgment Categories', ja: '判定カテゴリ' },
+  'dashboard.layer_matrix': { en: 'Layer Matrix', ja: 'レイヤーマトリクス' },
+  'dashboard.actor_matrix': { en: 'Actor Impact Matrix', ja: '当事者影響マトリクス' },
+  'dashboard.winner_loser': { en: 'Winner / Loser Distribution', ja: '勝者・敗者分布' },
+  'dashboard.burden_matrix': { en: 'Burden Transfer Matrix', ja: '負担転嫁マトリクス' },
+  'dashboard.global_flags': { en: 'Global Audit Flags', ja: 'グローバル監査フラグ' },
+  'dashboard.local_vs_global': { en: 'Local FDCR vs Global FDCR', ja: 'ローカルFDCR対グローバルFDCR' },
+  'dashboard.short_vs_long': { en: 'Short-Term vs Long-Term Impact', ja: '短期対長期影響' },
+  'dashboard.positive_metrics': { en: 'Positive Metrics', ja: 'ポジティブ指標' },
+  'dashboard.risk_metrics': { en: 'Risk Metrics', ja: 'リスク指標' },
+  'dashboard.global_metrics': { en: 'Global Metrics', ja: 'グローバル指標' },
+
   'app.name': { en: 'FEDS Studio', ja: 'FEDS スタジオ' },
   'app.subtitle': { en: 'Freedom Dialectical Correctness Simulator', ja: '自由弁証法正答率シミュレーター' },
   'app.begin_audit': { en: 'Begin Audit', ja: '監査を開始' },

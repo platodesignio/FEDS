@@ -82,6 +82,48 @@ const base: TranslationDict = {
   'dashboard.positive_metrics': { en: 'Positive Metrics', ja: 'ポジティブ指標' },
   'dashboard.risk_metrics': { en: 'Risk Metrics', ja: 'リスク指標' },
   'dashboard.global_metrics': { en: 'Global Metrics', ja: 'グローバル指標' },
+  'dashboard.top_generating': { en: 'Top Freedom-Generating Factors', ja: '上位・自由生成要因' },
+  'dashboard.top_closing': { en: 'Top Freedom-Closing Risks', ja: '上位・自由閉鎖リスク' },
+  'dashboard.improvement': { en: 'Improvement Conditions', ja: '改善条件' },
+  // ── Scenarios ────────────────────────────────────────────────────────────
+  'scenarios.title': { en: 'Scenario Comparison', ja: 'シナリオ比較' },
+  'scenarios.empty.title': { en: 'Scenario Comparison', ja: 'シナリオ比較' },
+  'scenarios.empty.body': {
+    en: 'Run an audit or load a demo case to compare three scenarios side by side: Current System, Freedom-Generative Reform, and Managerial Intensification. Each scenario shows FDCR, G-FDCR, key metrics, and recommended reform direction.',
+    ja: '監査を実行またはデモケースを読み込むと、現在のシステム・自由生成的改革・管理的強化の3シナリオを並列比較できます。各シナリオにFDCR・G-FDCR・主要指標・推奨改革方向が表示されます。',
+  },
+  'scenarios.current': { en: 'Current System', ja: '現在のシステム' },
+  'scenarios.reform': { en: 'Freedom-Generative Reform', ja: '自由生成的改革' },
+  'scenarios.managerial': { en: 'Managerial Intensification', ja: '管理的強化' },
+  'scenarios.reform_direction': { en: 'Recommended Reform Direction', ja: '推奨改革方向' },
+  'scenarios.metric_comparison': { en: 'Metric Comparison', ja: '指標比較' },
+  'scenarios.load_different': { en: 'Compare with a different demo case', ja: '別のデモケースで比較する' },
+  'scenarios.reform_direction.high_msjr': {
+    en: 'Reduce managerial self-justification by separating efficiency metrics from freedom-generation metrics. Add independent audit body.',
+    ja: '効率指標と自由生成指標を分離し、管理的自己正当化を軽減する。独立監査機関を追加する。',
+  },
+  'scenarios.reform_direction.low_rci': {
+    en: 'Urgently add appeal mechanisms, record expiration, and reclassification pathways. The current re-entry blockage is critical.',
+    ja: '異議申立・記録失効・再分類経路を緊急追加する。現在の再参入阻止は重大です。',
+  },
+  'scenarios.reform_direction.high_cfr': {
+    en: 'Introduce record expiration, human review requirements, and reduce AI score persistence to break classification fixation.',
+    ja: '記録失効・人間レビュー要件を導入し、AIスコア永続性を軽減して分類固定を打破する。',
+  },
+  'scenarios.reform_direction.default': {
+    en: 'Prioritize democratic re-audit (DRR), lifeworld translation quality (LSAR), and bodily generation (BGR). Add burden transfer disclosure and epistemic injustice review.',
+    ja: '民主的再監査（DRR）・生活世界翻訳品質（LSAR）・身体生成（BGR）を優先する。負担転嫁開示と認識的不正義レビューを追加する。',
+  },
+  // ── Home — Research Use ──────────────────────────────────────────────────
+  'home.research_use.title': { en: 'Research Use', ja: 'リサーチ用途' },
+  'home.research_use.audience': {
+    en: 'Designed for independent researchers, policy analysts, AI governance researchers, civic technologists, institutional designers, and critical theory projects.',
+    ja: '独立研究者・政策アナリスト・AIガバナンス研究者・市民技術者・制度設計者・批判理論プロジェクトのために設計されています。',
+  },
+  'home.research_use.purpose': {
+    en: 'FEDS Studio is built for analyzing whether creative future-challenge remains aligned with freedom-generation, or whether institutional systems convert freedom into management, classification, optimization, burden transfer, and bureaucratic self-justification.',
+    ja: 'FEDS Studioは、創造的未来挑戦が自由生成と整合しているか、あるいは制度的システムが自由を管理・分類・最適化・負担転嫁・官僚的自己正当化に変換しているかを分析するために構築されています。',
+  },
 
   'app.name': { en: 'FEDS Studio', ja: 'FEDS スタジオ' },
   'app.subtitle': { en: 'Freedom Dialectical Correctness Simulator', ja: '自由弁証法正答率シミュレーター' },

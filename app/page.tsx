@@ -93,6 +93,13 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Research Use */}
+      <section className="border border-[#e2e8f0] p-6 space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('home.research_use.title')}</h2>
+        <p className="text-sm leading-relaxed text-gray-700 max-w-3xl">{t('home.research_use.audience')}</p>
+        <p className="text-sm leading-relaxed text-gray-700 max-w-3xl">{t('home.research_use.purpose')}</p>
+      </section>
+
       {/* Primary score axis explainer */}
       <section className="border border-[#e2e8f0] p-6 space-y-3">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Primary Score Axis</h2>

@@ -74,6 +74,103 @@ const GLOBAL_CARDS = [
   { id: 'PAI',  label: 'PAI',  desc: 'Planetary Accountability Index', type: 'positive' as const },
 ]
 
+const ALL_POSITIVE = ['CFCS','DER','RCI','BGR','DRR','BDER','LSAR','EGR','HGR','IGR','PDFS','MGR','SRGR','TIGR','D-RGR','PRCI','GDRR','CBRI','SCTR','PAI']
+const ALL_RISK     = ['MSJR','CFR','RBR','RDR','BBI','TCR','MTR','EER','EIR','SRR','FMR','NPR','GSR','BTR','CDR','SCDR','CIR','FGR','PPR','GDDR','DCR']
+
+const METRIC_LABELS: Record<string, string> = {
+  CFCS:'Creative Future-Challenge Score', DER:'Dialectical Efficacy Rate', RCI:'Return Capacity Index',
+  BGR:'Bodily Generation Rate', DRR:'Democratic Re-Audit Rate', BDER:'Bio-Divisional Efficacy Rate',
+  LSAR:'Lifeworld Subject Audit Rate', EGR:'Ecological Generation Rate', HGR:'Historical-Generational Responsibility',
+  MSJR:'Managerial Self-Justification Risk', CFR:'Classification Fixation Risk', RBR:'Re-entry Blockage Risk',
+  RDR:'Responsibility Displacement Risk', BBI:'Bodily Burden Index', TCR:'Temporal Compression Risk',
+  MTR:'Metaphysical Transgression Risk', EER:'Ecological Extraction Risk', EIR:'Epistemic Injustice Risk',
+  SRR:'Securitization Risk', FMR:'Financialization Risk', BTR:'Burden Transfer Risk',
+  CDR:'Climate Displacement Risk', SCDR:'Supply Chain Dependency Risk', FGR:'Future Generation Risk',
+}
+
+const IMPROVEMENT_RULES: { check: (ms: Record<string,number>, cat: string) => boolean; text: string }[] = [
+  { check: (ms) => ms.RCI < 40,  text: 'Add appeal procedure, record expiration, and reclassification pathway to restore re-entry capacity (RCI).' },
+  { check: (ms) => ms.MSJR > 65, text: 'Separate efficiency metrics from freedom-generation metrics. Add anti-managerial self-justification audit check (MSJR).' },
+  { check: (ms) => ms.DRR < 40,  text: 'Add independent audit body, participatory review, and democratic legitimacy check (DRR).' },
+  { check: (ms) => ms.CFR > 65,  text: 'Introduce record expiration, human review requirements, and reduce AI score persistence to reduce classification fixation (CFR).' },
+  { check: (ms) => ms.BGR < 40,  text: 'Add bodily burden assessment and time-for-repair policy. Protect sleep, breath, and recovery (BGR).' },
+  { check: (ms) => ms.EIR > 65,  text: 'Add epistemic injustice review and lifeworld testimony channel. Ensure affected subject voices are not erased in institutional translation (EIR).' },
+  { check: (ms) => ms.BTR > 60,  text: 'Add cross-border accountability mechanism and burden transfer disclosure. Make hidden burden transfers visible (BTR).' },
+  { check: (ms) => ms.MTR > 65,  text: 'Prevent AI scores from becoming proxies for human worth. Add score context documentation and uncertainty disclosure (MTR).' },
+  { check: (ms) => ms.EER > 65,  text: 'Add ecological cost visibility and institutional responsibility assignment for energy and compute burden (EER).' },
+  { check: (ms) => ms.LSAR < 40, text: 'Add lifeworld testimony channel and affected-subject participation to improve institutional translation quality (LSAR).' },
+  { check: (ms) => ms.BDER < 40, text: 'Strengthen living cooperation and care network support. Redistribute burden without exploitation (BDER).' },
+  { check: (ms, cat) => ms.DRR < 30 && (cat === 'Public policy' || cat === 'Welfare'), text: 'For public policy and welfare systems with low DRR: mandate democratic re-audit cycle and legislative oversight.' },
+]
+
+function TopFactorsPanel({ metrics, t }: { metrics: Record<string, number>; t: (k: string) => string }) {
+  const topGenerating = [...ALL_POSITIVE]
+    .sort((a, b) => (metrics[b] ?? 50) - (metrics[a] ?? 50))
+    .slice(0, 3)
+  const topClosing = [...ALL_RISK]
+    .sort((a, b) => (metrics[b] ?? 50) - (metrics[a] ?? 50))
+    .slice(0, 3)
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      <div className="border border-[#e2e8f0] p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-[#1a3a5c]">{t('dashboard.top_generating')}</h3>
+        <div className="space-y-2">
+          {topGenerating.map((id, rank) => (
+            <div key={id} className="flex items-center gap-3">
+              <span className="font-mono text-xs text-gray-300 w-4 shrink-0">{rank + 1}</span>
+              <div className="flex-1 bg-[#e2e8f0] h-2 rounded-none">
+                <div className="bg-[#15803d] h-2" style={{ width: `${metrics[id] ?? 50}%` }} />
+              </div>
+              <span className="font-mono text-xs font-semibold text-[#15803d] w-8 text-right">{Math.round(metrics[id] ?? 50)}</span>
+              <span className="text-xs text-gray-600 w-36 truncate">{METRIC_LABELS[id] ?? id}</span>
+              <span className="font-mono text-xs font-bold text-[#1a3a5c] w-12 shrink-0">{id}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="border border-[#e2e8f0] p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-[#1a3a5c]">{t('dashboard.top_closing')}</h3>
+        <div className="space-y-2">
+          {topClosing.map((id, rank) => (
+            <div key={id} className="flex items-center gap-3">
+              <span className="font-mono text-xs text-gray-300 w-4 shrink-0">{rank + 1}</span>
+              <div className="flex-1 bg-[#e2e8f0] h-2 rounded-none">
+                <div className="bg-[#b91c1c] h-2" style={{ width: `${metrics[id] ?? 50}%` }} />
+              </div>
+              <span className="font-mono text-xs font-semibold text-[#b91c1c] w-8 text-right">{Math.round(metrics[id] ?? 50)}</span>
+              <span className="text-xs text-gray-600 w-36 truncate">{METRIC_LABELS[id] ?? id}</span>
+              <span className="font-mono text-xs font-bold text-[#1a3a5c] w-12 shrink-0">{id}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ImprovementPanel({ metrics, fdcr, category, t }: { metrics: Record<string, number>; fdcr: number; category: string; t: (k: string) => string }) {
+  const applicable = IMPROVEMENT_RULES.filter((r) => r.check(metrics, category))
+  if (applicable.length === 0 && fdcr >= 70) return null
+  return (
+    <div className="border border-[#e2e8f0] p-4 space-y-3">
+      <h3 className="text-sm font-semibold text-[#1a3a5c]">{t('dashboard.improvement')}</h3>
+      {applicable.length === 0 ? (
+        <p className="text-xs text-gray-500">No critical improvement conditions identified at current thresholds.</p>
+      ) : (
+        <ul className="space-y-2">
+          {applicable.map((r, i) => (
+            <li key={i} className="flex gap-3 text-xs text-gray-700 leading-relaxed">
+              <span className="text-amber-500 shrink-0 mt-0.5">▸</span>
+              {r.text}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 function LocalVsGlobalPanel({ fdcr, gfdcr, t }: { fdcr: number; gfdcr: number; t: (k: string) => string }) {
   const diff = Math.round(fdcr - gfdcr)
   const flag =
@@ -298,6 +395,12 @@ export default function DashboardPage() {
             <LocalVsGlobalPanel fdcr={scoreResult.fdcr} gfdcr={scoreResult.gfdcr} t={t} />
             <ShortLongPanel fdcr={scoreResult.fdcr} metrics={ms} t={t} />
           </div>
+          {/* Top generating / closing factors */}
+          <TopFactorsPanel metrics={ms} t={t} />
+
+          {/* Improvement conditions */}
+          <ImprovementPanel metrics={ms} fdcr={scoreResult.fdcr} category={scoreResult.report.category} t={t} />
+
           <div>
             <h3 className="mb-3 text-sm font-semibold text-[#1a3a5c]">{t('dashboard.layer_matrix')}</h3>
             <LayerMatrix />

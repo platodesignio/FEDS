@@ -41,12 +41,18 @@ export default function Home() {
           {t('app.core_question')}
         </p>
 
-        <div className="pt-2">
+        <div className="pt-2 flex gap-3 flex-wrap">
           <Link
-            href="/audit"
+            href="/dashboard"
             className="inline-block bg-[#1a3a5c] px-6 py-3 text-sm font-medium text-white hover:bg-[#0f2440] transition-colors"
           >
-            {t('app.begin_audit')} →
+            {t('nav.dashboard')} →
+          </Link>
+          <Link
+            href="/audit"
+            className="inline-block border border-[#1a3a5c] px-6 py-3 text-sm font-medium text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
+          >
+            {t('workbench.title')} →
           </Link>
         </div>
       </header>
@@ -86,7 +92,7 @@ export default function Home() {
                 onClick={() => handleLoadDemo(dc.id)}
                 className="inline-block border border-[#1a3a5c] px-3 py-1.5 text-xs font-medium text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
               >
-                {t('demo.load')}
+                {t('console.open_case_file')}
               </button>
             </div>
           ))}

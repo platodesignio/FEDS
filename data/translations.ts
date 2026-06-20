@@ -132,12 +132,169 @@ const base: TranslationDict = {
     en: 'FEDS Studio audits systems, policies, and technologies for the degree to which they dialectically generate freedom across body, society, institutions, democracy, ecology, and future generations — and the degree to which they transfer hidden burdens.',
     ja: 'FEDSスタジオは、システム・政策・技術が身体・社会・制度・民主・生態・未来世代にわたり自由を弁証法的に生成する度合いと、隠れた負担を転嫁する度合いを監査します。',
   },
+  // ── 3D Simulation Theater ────────────────────────────────────────────────
+  'sim.title': { en: '3D Simulation Theater', ja: '3Dシミュレーションシアター' },
+  'sim.subtitle': {
+    en: 'A PC-first research visualization environment for planetary burden transfer, urban systems analysis, and institutional flow auditing.',
+    ja: '地球規模の負担転嫁・都市システム分析・制度フロー監査のためのPC優先型研究可視化環境。',
+  },
+  'sim.arch_note': {
+    en: 'The 3D Simulation Theater is a research visualization layer, not a final empirical proof. It spatializes audit variables, actor distributions, burden-transfer pathways, ecological risks, and scenario assumptions so they can be inspected, revised, and debated.',
+    ja: '3Dシミュレーションシアターは研究可視化レイヤーであり、最終的な実証ではありません。監査変数・当事者分布・負担転嫁経路・生態リスク・シナリオ前提を空間化することで、検討・修正・議論を可能にします。',
+  },
+  'sim.method_note': {
+    en: 'The 3D Simulation Theater is a research visualization layer, not a final empirical proof. It spatializes audit variables, actor distributions, burden-transfer pathways, ecological risks, and scenario assumptions so they can be inspected, revised, and debated. All visualizations are derived from FDCR audit variables and should be interpreted as directional indicators, not causal measurements.',
+    ja: '3Dシミュレーションシアターは研究可視化レイヤーであり、最終的な実証ではありません。監査変数・当事者分布・負担転嫁経路・生態リスク・シナリオ前提を空間化することで、検討・修正・議論を可能にします。すべての可視化はFDCR監査変数から導出され、因果的測定値ではなく方向的指標として解釈する必要があります。',
+  },
+  // ── Ecological metrics ────────────────────────────────────────────────────
+  'eco.ebdcr.name':   { en: 'EBDCR', ja: 'EBDCR' },
+  'eco.ebdcr.full':   { en: 'Ecological Bio-Divisional Correctness Rate', ja: '生態系的生命分業正答率' },
+  'eco.ebde.name':    { en: 'EBDE',  ja: 'EBDE' },
+  'eco.ebde.full':    { en: 'Ecological Bio-Divisional Efficacy',         ja: '生態系的生命分業効力' },
+  'eco.efdcr.name':   { en: 'E-FDCR', ja: 'E-FDCR' },
+  'eco.efdcr.full':   { en: 'Ecological Freedom-Evolution Dialectical Correctness Rate', ja: '生態系的自由進化弁証法正答率' },
+  'eco.epbtm.name':   { en: 'EP-BTM', ja: 'EP-BTM' },
+  'eco.epbtm.full':   { en: 'Eco-Planetary Burden Transfer Matrix',       ja: '生態系・地球全系負荷転嫁マトリクス' },
+  // ── Eco judgment categories ───────────────────────────────────────────────
+  'judgment.ecologically_correct_freedom_evolution': { en: 'Ecologically Correct Freedom-Evolution', ja: '生態的に正しい自由進化' },
+  'judgment.locally_free_ecologically_incorrect':    { en: 'Locally Freedom-Generative but Ecologically Incorrect', ja: '局所的自由生成・生態的不正答' },
+  'judgment.ecologically_opaque_freedom':            { en: 'Ecologically Opaque Freedom', ja: '生態的不透明自由' },
+  'judgment.human_centered_bio_division_eco_failure':{ en: 'Human-Centered Bio-Division with Ecological Failure', ja: '人間中心生命分業・生態失敗' },
+  'judgment.eco_planetary_freedom_failure':          { en: 'Eco-Planetary Freedom Failure', ja: '生態地球的自由失敗' },
+  // ── Console Spatial-Planetary section ─────────────────────────────────────
+  'console.simulation.title': { en: 'Spatial-Planetary Simulation', ja: '空間的地球的シミュレーション' },
+  'console.simulation.desc': {
+    en: 'Visualize audit results as spatial, planetary, and institutional simulations.',
+    ja: '監査結果を空間的・地球的・制度的シミュレーションとして可視化します。',
+  },
+  'console.simulation.planetary': { en: 'Open Planetary View', ja: '惑星ビューを開く' },
+  'console.simulation.urban':     { en: 'Open Urban Systems View', ja: '都市システムビューを開く' },
+  'console.simulation.flow':      { en: 'Open Institutional Flow', ja: '制度フロービューを開く' },
+  // ── Eco variable categories ───────────────────────────────────────────────
+  'varcat.ECO_A': { en: 'Ecological Division Variables', ja: '生態分業変数' },
+  'varcat.ECO_B': { en: 'Planetary Infrastructure Variables', ja: '地球的インフラ変数' },
+  'varcat.ECO_C': { en: 'Eco-Bio-Divisional Variables', ja: '生態生命分業変数' },
+  'varcat.ECO_D': { en: 'Eco-Planetary Burden Transfer Variables', ja: '生態地球的負担転嫁変数' },
+  // ── Method Settings eco weights ───────────────────────────────────────────
+  'method.eco_weights': { en: 'Ecological Scoring Weights', ja: '生態スコアリングウェイト' },
+  'method.eco_weights.note': {
+    en: 'All ecological weights are provisional heuristic values. EBDCR, EBDE, E-FDCR, and EP-BTM are derived scores computed from existing metric values via the ecological scoring formulas.',
+    ja: 'すべての生態ウェイトは暫定的なヒューリスティック値です。EBDCR・EBDE・E-FDCR・EP-BTMは、生態スコアリング式を通じて既存指標値から導出されるスコアです。',
+  },
+  // ── Report Dossier eco sections ───────────────────────────────────────────
+  'dossier.eco.ebdcr':  { en: 'Ecological Bio-Divisional Correctness Analysis', ja: '生態系的生命分業正答分析' },
+  'dossier.eco.efdcr':  { en: 'Ecological Freedom-Evolution Dialectical Correctness Analysis', ja: '生態系的自由進化弁証法正答分析' },
+  'dossier.eco.epbtm':  { en: 'Eco-Planetary Burden Transfer Matrix', ja: '生態系・地球全系負荷転嫁マトリクス' },
+  'dossier.eco.sim':    { en: 'Spatial-Planetary Simulation Notes', ja: '空間的地球的シミュレーション注記' },
+  'dossier.eco.scenario': { en: '3D Scenario Interpretation', ja: '3Dシナリオ解釈' },
+
   'nav.home': { en: 'Home', ja: 'ホーム' },
-  'nav.audit': { en: 'Audit', ja: '監査' },
-  'nav.dashboard': { en: 'Dashboard', ja: 'ダッシュボード' },
-  'nav.scenarios': { en: 'Scenarios', ja: 'シナリオ' },
-  'nav.report': { en: 'Report', ja: 'レポート' },
-  'nav.settings': { en: 'Settings', ja: '設定' },
+  'nav.audit': { en: 'Audit Workbench', ja: '監査ワークベンチ' },
+  'nav.dashboard': { en: 'Research Console', ja: 'リサーチコンソール' },
+  'nav.scenarios': { en: 'Scenario Lab', ja: 'シナリオラボ' },
+  'nav.report': { en: 'Report Dossier', ja: 'レポート調書' },
+  'nav.simulation': { en: '3D Simulation', ja: '3Dシミュレーション' },
+  'nav.settings': { en: 'Method Settings', ja: 'メソッド設定' },
+
+  // ── Research Console ────────────────────────────────────────────────────────
+  'console.title': { en: 'Research Console', ja: 'リサーチコンソール' },
+  'console.subtitle': {
+    en: 'Open a structured audit case file or begin a new FDCR audit.',
+    ja: '構造化された監査ケースファイルを開くか、新しいFDCR監査を開始してください。',
+  },
+  'console.notice.no_persons': {
+    en: 'This application does not score persons. It audits the directional effects of systems, institutions, technologies, spaces, classifications, practices, and policies.',
+    ja: 'このアプリケーションは個人を採点しません。システム・制度・技術・空間・分類・実践・政策の方向的効果を監査します。',
+  },
+  'console.notice.not_absolute': {
+    en: 'FDCR is not an absolute truth score. It is an operational audit indicator for whether a system\'s creative future-challenge remains correct in the direction of freedom-generation under explicit assumptions.',
+    ja: 'FDCRは絶対的真実スコアではありません。明示的な前提の下で、システムの創造的未来挑戦が自由生成の方向において正答であるかを示す操作的監査指標です。',
+  },
+  'console.case_files': { en: 'Canonical Case Files', ja: '標準ケースファイル' },
+  'console.case_files.desc': {
+    en: 'Pre-configured research audit cases. Each case file contains a structured FDCR audit with full metric analysis, actor impact distribution, and burden transfer pathways.',
+    ja: '事前設定された研究監査ケース。各ケースファイルには、完全な指標分析・当事者影響分布・負担転嫁経路を含む構造化FDCR監査が含まれます。',
+  },
+  'console.case_file': { en: 'Case File', ja: 'ケースファイル' },
+  'console.central_tension': { en: 'Central Tension', ja: '中心的矛盾' },
+  'console.primary_question': { en: 'Primary Audit Question', ja: '主要監査問い' },
+  'console.open_case_file': { en: 'Open Case File', ja: 'ケースファイルを開く' },
+  'console.methodological_notes': { en: 'Methodological Notes', ja: '方法論的注記' },
+  'console.method_note.1': {
+    en: 'FDCR is an operational audit indicator, not an absolute truth score.',
+    ja: 'FDCRは操作的監査指標であり、絶対的真実スコアではありません。',
+  },
+  'console.method_note.2': {
+    en: 'Initial weights are provisional heuristic weights.',
+    ja: '初期ウェイトは暫定的なヒューリスティックウェイトです。',
+  },
+  'console.method_note.3': {
+    en: 'Scores must be interpreted through actor distribution, burden transfer, re-entry capacity, and democratic re-audit.',
+    ja: 'スコアは当事者分布・負担転嫁・再参入容量・民主的再監査を通じて解釈する必要があります。',
+  },
+  // ── Case file loaded state ─────────────────────────────────────────────────
+  'console.loaded.header': { en: 'Case File', ja: 'ケースファイル' },
+  'console.loaded.audit_question': { en: 'Central Audit Question', ja: '中心的監査問い' },
+  'console.loaded.contradiction': { en: 'Primary Contradiction', ja: '主要矛盾' },
+  'console.loaded.axis_summary': { en: 'Audit Axis Summary', ja: '監査軸要旨' },
+  'console.loaded.distribution': { en: 'Distribution of Freedom and Burden', ja: '自由と負担の分布' },
+  'console.loaded.burden_pathways': { en: 'Burden Transfer Pathways', ja: '負担転嫁経路' },
+  'console.loaded.indicators': { en: 'FDCR / G-FDCR Research Indicators', ja: 'FDCR / G-FDCR研究指標' },
+  'console.loaded.scenario_comparison': { en: 'Scenario Comparison', ja: 'シナリオ比較' },
+  'console.loaded.research_notes': { en: 'Research Notes', ja: 'リサーチノート' },
+  'console.loaded.actions': { en: 'Actions', ja: 'アクション' },
+  'console.loaded.open_dossier': { en: 'Open Report Dossier', ja: 'レポート調書を開く' },
+  'console.loaded.open_lab': { en: 'Open Scenario Lab', ja: 'シナリオラボを開く' },
+  'console.loaded.export': { en: 'Export Case File', ja: 'ケースファイルを出力' },
+  'console.loaded.new_audit': { en: 'Begin New Audit', ja: '新しい監査を開始' },
+  'console.loaded.no_burden': { en: 'No explicit burden transfer pathways identified.', ja: '明示的な負担転嫁経路は確認されません。' },
+  'console.loaded.custom': { en: 'Custom Audit', ja: 'カスタム監査' },
+
+  // ── Audit Workbench ────────────────────────────────────────────────────────
+  'workbench.title': { en: 'Audit Workbench', ja: '監査ワークベンチ' },
+  'workbench.subtitle': {
+    en: 'Configure a structured FDCR audit case. Each section refines the audit object, subjects, and variable inputs.',
+    ja: '構造化されたFDCR監査ケースを設定します。各セクションで監査対象・主体・変数入力を絞り込みます。',
+  },
+  'workbench.step.1': { en: '01 — Case Object', ja: '01 — ケース対象' },
+  'workbench.step.2': { en: '02 — Classification of Target', ja: '02 — 対象の分類' },
+  'workbench.step.3': { en: '03 — Affected Layers', ja: '03 — 影響レイヤー' },
+  'workbench.step.4': { en: '04 — Affected Subjects', ja: '04 — 影響主体' },
+  'workbench.step.5': { en: '05 — Variable Configuration', ja: '05 — 変数設定' },
+  'workbench.step.6': { en: '06 — Structured Audit Questions', ja: '06 — 構造化監査問い' },
+  'workbench.generate': { en: 'Generate Case File', ja: 'ケースファイルを生成' },
+
+  // ── Scenario Lab ────────────────────────────────────────────────────────────
+  'lab.title': { en: 'Scenario Lab', ja: 'シナリオラボ' },
+  'lab.subtitle': {
+    en: 'Comparative analysis of three audit scenarios for the same system: current state, freedom-generative reform, and managerial intensification.',
+    ja: '同一システムに対する3つの監査シナリオの比較分析：現状・自由生成的改革・管理的強化。',
+  },
+  'lab.empty.title': { en: 'Scenario Lab — No Case File Open', ja: 'シナリオラボ — ケースファイル未開封' },
+  'lab.empty.body': {
+    en: 'Open a case file from the Research Console or run a new audit to compare scenario trajectories.',
+    ja: 'リサーチコンソールからケースファイルを開くか、新しい監査を実行してシナリオ軌跡を比較してください。',
+  },
+
+  // ── Report Dossier ──────────────────────────────────────────────────────────
+  'dossier.title': { en: 'Report Dossier', ja: 'レポート調書' },
+  'dossier.subtitle': {
+    en: 'Institutional research dossier generated from the current audit case file.',
+    ja: '現在の監査ケースファイルから生成された制度的研究調書。',
+  },
+  'dossier.empty.title': { en: 'Report Dossier — No Case File Open', ja: 'レポート調書 — ケースファイル未開封' },
+  'dossier.empty.body': {
+    en: 'Open a case file or complete an audit to generate a full institutional research dossier with 25 sections.',
+    ja: 'ケースファイルを開くか監査を完了すると、25セクションの完全な制度的研究調書が生成されます。',
+  },
+  'dossier.section_preview': { en: 'Dossier Structure', ja: '調書構造' },
+
+  // ── Method Settings ─────────────────────────────────────────────────────────
+  'method.title': { en: 'Method Settings', ja: 'メソッド設定' },
+  'method.subtitle': {
+    en: 'Audit methodology, scoring weights, research assumptions, and export configuration.',
+    ja: '監査方法論・スコアリングウェイト・研究前提・エクスポート設定。',
+  },
   'notice.no_persons': {
     en: 'No real persons are scored. FEDS audits systems and structures, never individuals.',
     ja: '実在の人物は採点されません。FEDSはシステムと構造のみを監査し、個人を採点しません。',

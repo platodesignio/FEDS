@@ -7,9 +7,11 @@ import { ActorImpact, BurdenTransferEntry } from '@/types/actor'
 import { AuditReport } from '@/types/report'
 import { ScenarioId, ScenarioResult } from '@/types/scenario'
 import { Locale } from '@/types/i18n'
+import { EcoScores } from '@/types/eco'
 import { t as translate } from './i18n'
 import { computeMetricScores, computeFDCR } from './scoring'
 import { computeGFDCR } from './globalScoring'
+import { computeEcologicalScores } from './ecologicalScoring'
 import { applyCorrections } from './corrections'
 import { determineJudgments } from './judgments'
 import { computeActorImpacts } from './actorImpact'
@@ -17,6 +19,7 @@ import { computeBurdenTransfers } from './burdenTransfer'
 import { generateScenarioResults } from './scenario'
 import { generateReport } from './reportGenerator'
 import { VARIABLES } from '@/data/variables'
+import { ECO_VARIABLES } from '@/data/ecologicalVariables'
 import { QUESTIONS } from '@/data/questions'
 import { DEMO_CASES, DemoCase } from '@/data/demoCases'
 
@@ -24,6 +27,7 @@ export interface ScoreResult {
   metrics: MetricScores
   fdcr: number
   gfdcr: number
+  ecoScores: EcoScores
   judgments: string[]
   corrections: string[]
   globalFlags: string[]
@@ -46,9 +50,11 @@ interface AuditContextValue {
   t: (key: string) => string
 }
 
+const ALL_VARIABLES = [...VARIABLES, ...ECO_VARIABLES]
+
 function defaultState(): AuditState {
   const variableValues: Record<string, number> = {}
-  for (const v of VARIABLES) variableValues[v.id] = v.defaultValue
+  for (const v of ALL_VARIABLES) variableValues[v.id] = v.defaultValue
   const questionValues: Record<string, number> = {}
   for (const q of QUESTIONS) questionValues[q.id] = 2
   return {
@@ -71,9 +77,8 @@ export function AuditProvider({ children }: { children: React.ReactNode }) {
   const loadDemoCase = useCallback((id: string) => {
     const demo = DEMO_CASES.find((d) => d.id === id)
     if (!demo) return
-    // Merge demo variable values with defaults so no key is missing
     const variableValues: Record<string, number> = {}
-    for (const v of VARIABLES) variableValues[v.id] = v.defaultValue
+    for (const v of ALL_VARIABLES) variableValues[v.id] = v.defaultValue
     const questionValues: Record<string, number> = {}
     for (const q of QUESTIONS) questionValues[q.id] = 2
     const merged: AuditState = {
@@ -82,17 +87,17 @@ export function AuditProvider({ children }: { children: React.ReactNode }) {
       questionValues: { ...questionValues, ...demo.state.questionValues },
     }
     setAuditState(merged)
-    // Run scoring immediately
     const metrics = computeMetricScores(merged)
     const rawFdcr = computeFDCR(metrics)
     const rawGfdcr = computeGFDCR(metrics, rawFdcr)
     const corr = applyCorrections(rawFdcr, rawGfdcr, metrics, merged.category)
-    const judgments = determineJudgments(corr.fdcr, corr.gfdcr, metrics, merged.category, corr.corrections)
+    const ecoScores = computeEcologicalScores(metrics, corr.fdcr, corr.gfdcr, merged.subjects)
+    const judgments = determineJudgments(corr.fdcr, corr.gfdcr, metrics, merged.category, corr.corrections, ecoScores)
     const actorImpacts = computeActorImpacts(merged.subjects, metrics, corr.fdcr)
     const burdenTransfers = computeBurdenTransfers(metrics, merged.subjects, merged.category)
     const scenarios = generateScenarioResults(merged, metrics, corr.fdcr, corr.gfdcr)
-    const report = generateReport(merged, metrics, corr.fdcr, corr.gfdcr, judgments, actorImpacts, burdenTransfers, locale)
-    setScoreResult({ metrics, fdcr: corr.fdcr, gfdcr: corr.gfdcr, judgments, corrections: corr.corrections, globalFlags: corr.globalFlags, layerCaps: corr.layerCaps, actorImpacts, burdenTransfers, scenarios, report })
+    const report = generateReport(merged, metrics, corr.fdcr, corr.gfdcr, judgments, actorImpacts, burdenTransfers, locale, ecoScores)
+    setScoreResult({ metrics, fdcr: corr.fdcr, gfdcr: corr.gfdcr, ecoScores, judgments, corrections: corr.corrections, globalFlags: corr.globalFlags, layerCaps: corr.layerCaps, actorImpacts, burdenTransfers, scenarios, report })
   }, [locale])
 
   const runAudit = useCallback(() => {
@@ -101,24 +106,13 @@ export function AuditProvider({ children }: { children: React.ReactNode }) {
       const rawFdcr = computeFDCR(metrics)
       const rawGfdcr = computeGFDCR(metrics, rawFdcr)
       const corr = applyCorrections(rawFdcr, rawGfdcr, metrics, state.category)
-      const judgments = determineJudgments(corr.fdcr, corr.gfdcr, metrics, state.category, corr.corrections)
+      const ecoScores = computeEcologicalScores(metrics, corr.fdcr, corr.gfdcr, state.subjects)
+      const judgments = determineJudgments(corr.fdcr, corr.gfdcr, metrics, state.category, corr.corrections, ecoScores)
       const actorImpacts = computeActorImpacts(state.subjects, metrics, corr.fdcr)
       const burdenTransfers = computeBurdenTransfers(metrics, state.subjects, state.category)
       const scenarios = generateScenarioResults(state, metrics, corr.fdcr, corr.gfdcr)
-      const report = generateReport(state, metrics, corr.fdcr, corr.gfdcr, judgments, actorImpacts, burdenTransfers, locale)
-      setScoreResult({
-        metrics,
-        fdcr: corr.fdcr,
-        gfdcr: corr.gfdcr,
-        judgments,
-        corrections: corr.corrections,
-        globalFlags: corr.globalFlags,
-        layerCaps: corr.layerCaps,
-        actorImpacts,
-        burdenTransfers,
-        scenarios,
-        report,
-      })
+      const report = generateReport(state, metrics, corr.fdcr, corr.gfdcr, judgments, actorImpacts, burdenTransfers, locale, ecoScores)
+      setScoreResult({ metrics, fdcr: corr.fdcr, gfdcr: corr.gfdcr, ecoScores, judgments, corrections: corr.corrections, globalFlags: corr.globalFlags, layerCaps: corr.layerCaps, actorImpacts, burdenTransfers, scenarios, report })
       return state
     })
   }, [locale])

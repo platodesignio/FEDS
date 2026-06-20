@@ -28,6 +28,15 @@ const RISK_WEIGHTS = [
   { metric: 'EER',  weight: '0.05', label: 'Ecological Extraction Risk' },
 ]
 
+const ECO_WEIGHTS = [
+  { metric: 'EBDCR',              weight: '0.35', label: 'Ecological Bio-Divisional Correctness Rate', risk: false },
+  { metric: 'EBDE',               weight: '0.25', label: 'Ecological Bio-Dialectical Efficacy', risk: false },
+  { metric: 'E-FDCR',             weight: '0.25', label: 'Ecological Freedom Dialectical Correctness Rate', risk: false },
+  { metric: 'EP-BTM',             weight: '0.15', label: 'Eco-Planetary Burden Transfer Matrix', risk: true  },
+  { metric: 'ecoRiskPenalty',     weight: '0.60', label: 'Ecological Risk Penalty (applied to EBDCR)', risk: true },
+  { metric: 'ecoPlanetaryRisk',   weight: '0.50', label: 'Ecological Planetary Risk Penalty (applied to E-FDCR)', risk: true },
+]
+
 const ASSUMPTIONS = [
   'Freedom-generation is directional, not absolute. FDCR measures direction, not a final state.',
   'A system with high FDCR must be creatively future-challenging, not merely order-preserving.',
@@ -38,64 +47,84 @@ const ASSUMPTIONS = [
   'Global burden transfer is a primary audit axis. Local correctness does not override global cost.',
 ]
 
-export default function SettingsPage() {
+function SectionHead({ label }: { label: string }) {
+  return <h2 className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{label}</h2>
+}
+
+export default function MethodSettingsPage() {
   const { t, auditState, locale } = useAudit()
   const [debugOpen, setDebugOpen] = useState(false)
 
   return (
     <div className="space-y-10 max-w-3xl">
-      <h1 className="text-2xl font-bold text-[#1a3a5c]">{t('nav.settings')}</h1>
+      <header className="border-b border-[#e2e8f0] pb-6 space-y-1">
+        <div className="text-[10px] uppercase tracking-widest text-gray-400">FEDS Studio</div>
+        <h1 className="text-2xl font-bold tracking-tight text-[#1a3a5c]">{t('method.title')}</h1>
+        <p className="text-sm text-gray-500 max-w-2xl">{t('method.subtitle')}</p>
+      </header>
 
       {/* Language */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('settings.language')}</h2>
+        <SectionHead label={t('settings.language')} />
         <LanguageSwitcher />
       </section>
 
       {/* Scoring Weights */}
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('settings.weights')}</h2>
+      <section className="space-y-4">
+        <SectionHead label={t('settings.weights')} />
         <p className="text-xs text-gray-500">{t('settings.weights.note')}</p>
         <div className="space-y-4">
           <div>
-            <h3 className="text-xs font-medium text-gray-700 mb-2">FDCR Positive Weights</h3>
+            <div className="text-[10px] font-mono text-gray-400 mb-2">FDCR — Positive Metric Weights</div>
             <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
               {FDCR_WEIGHTS.map(({ metric, weight, label }) => (
                 <div key={metric} className="flex items-center gap-3 px-4 py-2">
-                  <span className="font-mono text-xs font-bold text-[#1a3a5c] w-12 shrink-0">{metric}</span>
-                  <span className="font-mono text-xs text-gray-500 w-10 shrink-0">{weight}</span>
+                  <span className="font-mono text-[10px] font-bold text-[#1a3a5c] w-12 shrink-0">{metric}</span>
+                  <span className="font-mono text-[10px] text-gray-400 w-10 shrink-0">{weight}</span>
                   <span className="text-xs text-gray-600">{label}</span>
                 </div>
               ))}
             </div>
           </div>
           <div>
-            <h3 className="text-xs font-medium text-gray-700 mb-2">Risk Penalty Weights</h3>
+            <div className="text-[10px] font-mono text-gray-400 mb-2">FDCR — Risk Penalty Weights</div>
             <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
               {RISK_WEIGHTS.map(({ metric, weight, label }) => (
                 <div key={metric} className="flex items-center gap-3 px-4 py-2">
-                  <span className="font-mono text-xs font-bold text-[#b91c1c] w-12 shrink-0">{metric}</span>
-                  <span className="font-mono text-xs text-gray-500 w-10 shrink-0">{weight}</span>
+                  <span className="font-mono text-[10px] font-bold text-[#b91c1c] w-12 shrink-0">{metric}</span>
+                  <span className="font-mono text-[10px] text-gray-400 w-10 shrink-0">{weight}</span>
                   <span className="text-xs text-gray-600">{label}</span>
                 </div>
               ))}
             </div>
           </div>
-          <p className="text-xs text-gray-400 italic">
-            Weight recalibration requires editing <code className="font-mono">/lib/scoring.ts</code> and <code className="font-mono">/lib/globalScoring.ts</code>.
-            All changes take effect immediately on the next audit run.
+          <div>
+            <div className="text-[10px] font-mono text-gray-400 mb-2">Ecological Superscores — Composite Weights</div>
+            <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
+              {ECO_WEIGHTS.map(({ metric, weight, label, risk }) => (
+                <div key={metric} className="flex items-center gap-3 px-4 py-2">
+                  <span className={`font-mono text-[10px] font-bold w-36 shrink-0 ${risk ? 'text-[#b91c1c]' : 'text-[#15803d]'}`}>{metric}</span>
+                  <span className="font-mono text-[10px] text-gray-400 w-10 shrink-0">{weight}</span>
+                  <span className="text-xs text-gray-600">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="text-[10px] font-mono text-gray-400">
+            Recalibration requires editing <code>/lib/scoring.ts</code>, <code>/lib/globalScoring.ts</code>, and <code>/lib/ecologicalScoring.ts</code>.
+            Changes take effect on next audit run.
           </p>
         </div>
       </section>
 
       {/* Research Assumptions */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('settings.research_assumptions')}</h2>
+        <SectionHead label={t('settings.research_assumptions')} />
         <p className="text-xs text-gray-500">{t('settings.research_assumptions.note')}</p>
         <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
           {ASSUMPTIONS.map((a, i) => (
-            <div key={i} className="flex gap-3 px-4 py-3">
-              <span className="font-mono text-xs text-gray-300 shrink-0 pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+            <div key={i} className="flex gap-4 px-4 py-3">
+              <span className="font-mono text-[10px] text-gray-300 shrink-0 pt-0.5 w-5">{String(i + 1).padStart(2, '0')}</span>
               <p className="text-xs text-gray-700 leading-relaxed">{a}</p>
             </div>
           ))}
@@ -104,26 +133,24 @@ export default function SettingsPage() {
 
       {/* Export Settings */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('settings.export')}</h2>
-        <div className="border border-[#e2e8f0] p-4 space-y-2 text-xs text-gray-600">
-          <div className="flex gap-2">
-            <span className="font-mono text-[#1a3a5c] w-16 shrink-0">JSON</span>
-            <span>Full audit state + all computed scores. Machine-readable for further analysis.</span>
-          </div>
-          <div className="flex gap-2">
-            <span className="font-mono text-[#1a3a5c] w-16 shrink-0">PNG</span>
-            <span>Dashboard screenshot. Captures the current visible tab.</span>
-          </div>
-          <div className="flex gap-2">
-            <span className="font-mono text-[#1a3a5c] w-16 shrink-0">PDF</span>
-            <span>Full report as PDF. Recommended for archiving and sharing.</span>
-          </div>
+        <SectionHead label={t('settings.export')} />
+        <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
+          {[
+            { fmt: 'JSON', desc: 'Full audit state + all computed scores. Machine-readable for downstream analysis.' },
+            { fmt: 'PNG',  desc: 'Console screenshot. Captures the currently visible tab.' },
+            { fmt: 'PDF',  desc: 'Full Report Dossier as PDF. Recommended for archiving and institutional sharing.' },
+          ].map(({ fmt, desc }) => (
+            <div key={fmt} className="flex gap-4 px-4 py-3">
+              <span className="font-mono text-[10px] font-bold text-[#1a3a5c] w-10 shrink-0">{fmt}</span>
+              <span className="text-xs text-gray-600">{desc}</span>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Methodological Notes */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('settings.methodological_notes')}</h2>
+        <SectionHead label={t('settings.methodological_notes')} />
         <div className="border border-[#e2e8f0] p-4">
           <p className="text-xs leading-relaxed text-gray-600">{t('settings.methodological_notes.content')}</p>
         </div>
@@ -132,27 +159,17 @@ export default function SettingsPage() {
       {/* Philosophical Notice */}
       <PhilosophicalNotice />
 
-      {/* Debug — collapsible */}
+      {/* Debug */}
       <section className="space-y-2">
         <button
           onClick={() => setDebugOpen((o) => !o)}
-          className="text-xs text-gray-400 underline underline-offset-2"
+          className="text-[10px] font-mono text-gray-400 hover:text-[#1a3a5c] transition-colors"
         >
           {debugOpen ? '▾' : '▸'} {t('settings.debug')}
         </button>
         {debugOpen && (
-          <pre className="overflow-x-auto border border-[#e2e8f0] bg-gray-50 p-3 text-xs text-gray-500">
-            {JSON.stringify(
-              {
-                target: auditState.target,
-                category: auditState.category,
-                layers: auditState.layers,
-                subjects: auditState.subjects,
-                locale,
-              },
-              null,
-              2
-            )}
+          <pre className="overflow-x-auto border border-[#e2e8f0] bg-[#f8fafc] p-4 text-[10px] font-mono text-gray-500 leading-relaxed">
+            {JSON.stringify({ target: auditState.target, category: auditState.category, layers: auditState.layers, subjects: auditState.subjects, locale }, null, 2)}
           </pre>
         )}
       </section>

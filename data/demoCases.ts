@@ -2,10 +2,15 @@ import { AuditState } from '@/types/audit'
 
 export interface DemoCase {
   id: string
+  caseNumber: string
   label: string
   labelJa: string
   description: string
   descriptionJa: string
+  centralTension: string
+  centralTensionJa: string
+  primaryQuestion: string
+  primaryQuestionJa: string
   state: AuditState
 }
 
@@ -345,32 +350,53 @@ const welfareState: AuditState = {
 export const DEMO_CASES: DemoCase[] = [
   {
     id: 'ai_hiring',
-    label: 'AI Hiring System',
-    labelJa: 'AI採用システム',
+    caseNumber: '001',
+    label: 'AI Hiring System and Re-entry Blockage',
+    labelJa: 'AI採用システムと再参入阻止',
     description:
       'An automated candidate scoring and filtering system used in large-scale recruitment. Evaluates applicants via algorithmic profile matching, psychometric testing, and historical hiring data.',
     descriptionJa:
       '大規模採用で使用される自動候補者スコアリング・フィルタリングシステム。アルゴリズムによるプロファイルマッチング、心理測定テスト、過去の採用データで応募者を評価する。',
+    centralTension: 'Administrative efficiency vs institutional re-entry blockage',
+    centralTensionJa: '管理的効率性 vs 制度的再参入阻止',
+    primaryQuestion:
+      'Does the system preserve creative future-challenge and institutional re-entry, or does it convert applicants into irreversible probability profiles?',
+    primaryQuestionJa:
+      'このシステムは創造的未来挑戦性と制度的再参入を保持しているか、それとも応募者を不可逆的な確率プロファイルに変換しているか？',
     state: aiHiringState,
   },
   {
     id: 'smart_city_surveillance',
-    label: 'Smart City Surveillance Policy',
-    labelJa: 'スマートシティ監視政策',
+    caseNumber: '002',
+    label: 'Smart City Surveillance and Spatial Classification',
+    labelJa: 'スマートシティ監視と空間的分類',
     description:
       'A municipal policy deploying facial recognition, movement tracking, behavioral analytics, and integrated sensor networks to manage public safety, traffic, and social order in an urban environment.',
     descriptionJa:
       '顔認識、移動追跡、行動分析、統合センサーネットワークを展開し、都市環境における公安・交通・社会秩序を管理する自治体政策。',
+    centralTension: 'Urban safety vs spatial classification and bodily burden',
+    centralTensionJa: '都市安全 vs 空間的分類と身体的負担',
+    primaryQuestion:
+      'Does the smart city generate public safety while preserving bodily return, democratic visibility, and spatial re-entry, or does it turn urban life into monitored behavioral compliance?',
+    primaryQuestionJa:
+      'スマートシティは身体的帰還・民主的可視性・空間的再参入を保持しながら公共安全を生成しているか、それとも都市生活を監視下の行動遵守に変換しているか？',
     state: smartCityState,
   },
   {
     id: 'welfare_scoring',
-    label: 'Public Welfare Scoring System',
-    labelJa: '公的福祉スコアリングシステム',
+    caseNumber: '003',
+    label: 'Public Welfare Scoring and Lifeworld Translation Failure',
+    labelJa: '公的福祉スコアリングと生活世界翻訳失敗',
     description:
       'A government welfare eligibility system that classifies and scores applicants using administrative data, income verification, behavioral compliance tracking, and algorithmic risk assessment to determine benefit access.',
     descriptionJa:
       '行政データ、収入確認、行動遵守追跡、アルゴリズムによるリスク評価を用いて申請者を分類・採点し、給付へのアクセスを決定する政府の福祉適格性システム。',
+    centralTension: 'Administrative consistency vs lifeworld erasure',
+    centralTensionJa: '管理的一貫性 vs 生活世界の消去',
+    primaryQuestion:
+      'Does the welfare scoring system clarify public responsibility, or does it translate poverty, care burden, illness, and social context into rigid eligibility classifications?',
+    primaryQuestionJa:
+      '福祉スコアリングシステムは公的責任を明確化しているか、それとも貧困・介護負担・疾病・社会的文脈を硬直した資格分類に翻訳しているか？',
     state: welfareState,
   },
 ]

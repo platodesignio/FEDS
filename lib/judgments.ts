@@ -1,11 +1,13 @@
 import { MetricScores } from '@/types/metric'
+import { EcoScores } from '@/types/eco'
 
 export function determineJudgments(
   fdcr: number,
   gfdcr: number,
   metrics: MetricScores,
   _category: string,
-  _corrections: string[]
+  _corrections: string[],
+  ecoScores?: EcoScores
 ): string[] {
   const ms = metrics as unknown as Record<string, number>
   const out: string[] = []
@@ -38,6 +40,11 @@ export function determineJudgments(
   if (ms.SRR > 65) add('state_repressive')
   if (ms.NPR > 65) add('precarity_normalizing')
   if (ms.DPS > 65 && ms.WWR > 60) add('dao_aligned')
+
+  // Ecological judgments
+  if (ecoScores) {
+    for (const j of ecoScores.ecoJudgments) add(j)
+  }
 
   return out
 }

@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 
 interface FlowNode {
   id: string; label: string; labelJa: string
-  x: number; y: number; type: 'entry' | 'process' | 'gate' | 'exit_pos' | 'exit_neg' | 'burden'
+  x: number; y: number; type: 'entry' | 'process' | 'gate' | 'exit_pos' | 'exit_neg' | 'burden' | 'democratic'
   riskMetric?: string; riskThreshold?: number
 }
 

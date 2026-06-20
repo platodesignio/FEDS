@@ -17,12 +17,12 @@ export default function Navigation() {
     { href: '/settings',    key: 'nav.settings' },
   ]
   return (
-    <nav className="sticky top-0 z-50 border-b border-[#e2e8f0] bg-white">
+    <nav className="sticky top-0 z-50 border-b border-[#0f1e30] bg-[#05080f]">
       <div className="mx-auto max-w-6xl px-6 flex items-center justify-between py-3">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex flex-col leading-none">
-            <span className="text-sm font-bold tracking-tight text-[#1a3a5c]">FEDS Studio</span>
-            <span className="text-[10px] text-gray-400 tracking-wide uppercase">Freedom Dialectical Correctness</span>
+            <span className="text-sm font-bold tracking-tight text-[#7ac8f8]">FEDS Studio</span>
+            <span className="text-[10px] text-[#2a5a8a] tracking-wide uppercase">Freedom Dialectical Correctness</span>
           </Link>
           <div className="hidden gap-1 md:flex">
             {links.map((l) => {
@@ -33,8 +33,8 @@ export default function Navigation() {
                   href={l.href}
                   className={`px-3 py-1.5 text-xs font-medium transition-colors ${
                     active
-                      ? 'bg-[#f0f4f8] text-[#1a3a5c]'
-                      : 'text-gray-500 hover:text-[#1a3a5c]'
+                      ? 'bg-[#0f1e30] text-[#7ac8f8]'
+                      : 'text-[#3a6a8a] hover:text-[#7ac8f8]'
                   }`}
                 >
                   {t(l.key)}

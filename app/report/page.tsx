@@ -26,7 +26,6 @@ const DOSSIER_SECTIONS = [
 export default function ReportDossierPage() {
   const { scoreResult, t, locale, loadDemoCase, demoCases } = useAudit()
 
-  // Auto-load Case 001 so the dossier always shows substantive content
   useEffect(() => {
     if (!scoreResult) loadDemoCase('ai_hiring')
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -34,65 +33,63 @@ export default function ReportDossierPage() {
   if (!scoreResult) {
     return (
       <div className="space-y-8">
-        <header className="border-b border-[#e2e8f0] pb-6 space-y-1">
-          <div className="text-[10px] uppercase tracking-widest text-gray-400">FEDS Studio</div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#1a3a5c]">{t('dossier.title')}</h1>
-          <p className="text-sm text-gray-500 max-w-2xl">{t('dossier.subtitle')}</p>
+        <header className="border-b border-[#1e3a5a] pb-6 space-y-1">
+          <div className="text-[9px] uppercase tracking-widest text-[#3a6a8a]">FEDS Studio</div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#7ac8f8]">{t('dossier.title')}</h1>
+          <p className="text-sm text-[#4a7a9a] max-w-2xl">{t('dossier.subtitle')}</p>
         </header>
 
-        <div className="border border-[#e2e8f0] p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-[#1a3a5c]">{t('dossier.empty.title')}</h2>
-          <p className="text-sm text-gray-600 max-w-2xl">{t('dossier.empty.body')}</p>
+        <div className="border border-[#1e3a5a] p-6 space-y-4 bg-[#080e18]">
+          <h2 className="text-sm font-semibold text-[#7ac8f8]">{t('dossier.empty.title')}</h2>
+          <p className="text-sm text-[#7a98b4] max-w-2xl">{t('dossier.empty.body')}</p>
           <div className="flex gap-3 flex-wrap pt-1">
             <Link
               href="/audit"
-              className="inline-block bg-[#1a3a5c] px-4 py-2 text-xs font-medium text-white hover:bg-[#0f2440] transition-colors"
+              className="inline-block border border-[#4a8abb] px-4 py-2 text-xs font-medium text-[#7ac8f8] hover:bg-[#0f2535] transition-colors"
             >
               {t('workbench.title')} →
             </Link>
             <Link
               href="/dashboard"
-              className="inline-block border border-[#e2e8f0] px-4 py-2 text-xs text-gray-600 hover:border-[#1a3a5c] hover:text-[#1a3a5c] transition-colors"
+              className="inline-block border border-[#1e3a5a] px-4 py-2 text-xs text-[#4a7a9a] hover:border-[#4a8abb] hover:text-[#7ac8f8] transition-colors"
             >
               {t('nav.dashboard')}
             </Link>
           </div>
         </div>
 
-        {/* Dossier structure preview */}
         <div className="space-y-3">
-          <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{t('dossier.section_preview')}</h3>
-          <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
+          <h3 className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">{t('dossier.section_preview')}</h3>
+          <div className="border border-[#1e3a5a] divide-y divide-[#1e3a5a]">
             {DOSSIER_SECTIONS.map((s) => (
-              <div key={s.n} className="flex items-baseline gap-4 px-4 py-2.5">
-                <span className="font-mono text-[10px] text-gray-300 w-6 shrink-0">{s.n}</span>
-                <span className="text-xs text-gray-700">{locale === 'ja' ? s.ja : s.en}</span>
-                {locale === 'en' && <span className="text-[10px] text-gray-400">{s.ja}</span>}
+              <div key={s.n} className="flex items-baseline gap-4 px-4 py-2.5 bg-[#080e18]">
+                <span className="font-mono text-[10px] text-[#2a5a7a] w-6 shrink-0">{s.n}</span>
+                <span className="text-xs text-[#94a3b8]">{locale === 'ja' ? s.ja : s.en}</span>
+                {locale === 'en' && <span className="text-[10px] text-[#3a6a8a]">{s.ja}</span>}
               </div>
             ))}
-            <div className="px-4 py-2.5 text-[10px] font-mono text-gray-300">
+            <div className="px-4 py-2.5 text-[9px] font-mono text-[#2a5a7a] bg-[#080e18]">
               + 11 additional sections (Ecological, Global, Historical, Temporal, Daoist Corrective, Scenarios…)
             </div>
           </div>
         </div>
 
-        {/* Load case file */}
         <div className="space-y-3">
-          <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{t('console.case_files')}</h3>
-          <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
+          <h3 className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">{t('console.case_files')}</h3>
+          <div className="border border-[#1e3a5a] divide-y divide-[#1e3a5a]">
             {demoCases.map((dc) => (
-              <div key={dc.id} className="flex items-start justify-between gap-4 px-4 py-3">
+              <div key={dc.id} className="flex items-start justify-between gap-4 px-4 py-3 bg-[#080e18]">
                 <div>
-                  <div className="text-[10px] font-mono text-gray-400 uppercase tracking-wide mb-0.5">
+                  <div className="text-[9px] font-mono text-[#3a6a8a] uppercase tracking-wide mb-0.5">
                     {t('console.case_file')} {dc.caseNumber}
                   </div>
-                  <div className="text-xs font-semibold text-[#1a3a5c]">
+                  <div className="text-xs font-semibold text-[#7ac8f8]">
                     {locale === 'ja' ? dc.labelJa : dc.label}
                   </div>
                 </div>
                 <button
                   onClick={() => loadDemoCase(dc.id)}
-                  className="shrink-0 text-[10px] border border-[#1a3a5c] px-3 py-1 text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
+                  className="shrink-0 text-[9px] border border-[#2a5a8a] px-3 py-1 text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors"
                 >
                   {t('console.open_case_file')}
                 </button>
@@ -106,19 +103,20 @@ export default function ReportDossierPage() {
 
   return (
     <div className="space-y-6">
-      <header className="border-b border-[#e2e8f0] pb-6 space-y-1">
-        <div className="text-[10px] uppercase tracking-widest text-gray-400">FEDS Studio</div>
-        <h1 className="text-2xl font-bold tracking-tight text-[#1a3a5c]">{t('dossier.title')}</h1>
-        <p className="text-sm text-gray-500 max-w-2xl">{t('dossier.subtitle')}</p>
+      <header className="border-b border-[#1e3a5a] pb-6 space-y-1">
+        <div className="text-[9px] uppercase tracking-widest text-[#3a6a8a]">FEDS Studio</div>
+        <h1 className="text-2xl font-bold tracking-tight text-[#7ac8f8]">{t('dossier.title')}</h1>
+        <p className="text-sm text-[#4a7a9a] max-w-2xl">{t('dossier.subtitle')}</p>
       </header>
 
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <ExportButtons captureId="report-capture" />
-        <Link href="/dashboard" className="text-xs font-mono text-gray-500 hover:text-[#1a3a5c] transition-colors">
+        <Link href="/dashboard" className="text-xs font-mono text-[#3a6a8a] hover:text-[#7ac8f8] transition-colors">
           ← {t('nav.dashboard')}
         </Link>
       </div>
-      <div id="report-capture" className="bg-white">
+
+      <div id="report-capture" className="bg-[#080e18]">
         <ReportView />
       </div>
     </div>

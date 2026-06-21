@@ -12,7 +12,6 @@ import WinnerLoserChart from '@/components/WinnerLoserChart'
 import ScenarioComparison from '@/components/ScenarioComparison'
 import ExportButtons from '@/components/ExportButtons'
 
-// ── Metric lookup ──────────────────────────────────────────────────────────────
 const ALL_POSITIVE = ['CFCS','DER','RCI','BGR','DRR','BDER','LSAR','EGR','HGR','IGR','PDFS','MGR','SRGR','TIGR','D-RGR','PRCI','GDRR','CBRI','SCTR','PAI']
 const ALL_RISK     = ['MSJR','CFR','RBR','RDR','BBI','TCR','MTR','EER','EIR','SRR','FMR','NPR','GSR','BTR','CDR','SCDR','CIR','FGR','PPR','GDDR','DCR']
 
@@ -93,15 +92,22 @@ const IMPROVEMENT_RULES: { check: (ms: Record<string,number>, cat: string) => bo
   { check: (ms, cat) => ms.DRR < 30 && (cat === 'Public policy' || cat === 'Welfare'), text: 'For public policy and welfare systems with low DRR: mandate democratic re-audit cycle and legislative oversight.' },
 ]
 
-// ── Sub-components ─────────────────────────────────────────────────────────────
+const TABS = [
+  { key: 'common.overview',      label: 'Case File Overview' },
+  { key: 'common.metrics',       label: 'Full Metric Audit' },
+  { key: 'common.actor_impact',  label: 'Actor Distribution' },
+  { key: 'common.global',        label: 'Global / Planetary' },
+  { key: 'common.scenarios',     label: 'Scenario Lab' },
+  { key: 'common.export',        label: 'Export' },
+]
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{children}</h3>
+  return <h3 className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">{children}</h3>
 }
 
 function MiniBar({ value, color }: { value: number; color: string }) {
   return (
-    <div className="flex-1 h-1 bg-[#e2e8f0]">
+    <div className="flex-1 h-1 bg-[#0f1a2a]">
       <div className="h-1" style={{ width: `${value}%`, background: color }} />
     </div>
   )
@@ -121,21 +127,21 @@ function AxisSummaryTable({ ms }: { ms: Record<string, number> }) {
     { id: 'BTR',  label: 'Burden Transfer',            type: 'risk' as const },
   ]
   return (
-    <div className="border border-[#e2e8f0] divide-y divide-[#e2e8f0]">
+    <div className="border border-[#1e3a5a] divide-y divide-[#1e3a5a]">
       {rows.map(({ id, label, type }) => {
         const v = Math.round(ms[id] ?? 50)
         const color = type === 'pos' ? colorForPositive(v) : colorForRisk(v)
         return (
-          <div key={id} className="flex items-center gap-3 px-4 py-2">
-            <span className="font-mono text-[10px] font-bold text-[#1a3a5c] w-10 shrink-0">{id}</span>
-            <span className="text-xs text-gray-500 w-40 shrink-0">{label}</span>
+          <div key={id} className="flex items-center gap-3 px-4 py-2 bg-[#080e18]">
+            <span className="font-mono text-[10px] font-bold text-[#7ac8f8] w-10 shrink-0">{id}</span>
+            <span className="text-xs text-[#4a7a9a] w-40 shrink-0">{label}</span>
             <MiniBar value={v} color={color} />
             <span className="font-mono text-xs font-semibold w-8 text-right" style={{ color }}>{v}</span>
             <span
               className="text-[9px] font-mono px-1.5 py-0.5 shrink-0"
               style={{
-                color: type === 'pos' ? (v >= 50 ? '#15803d' : '#b91c1c') : (v >= 50 ? '#b91c1c' : '#15803d'),
-                background: type === 'pos' ? (v >= 50 ? '#f0fdf4' : '#fef2f2') : (v >= 50 ? '#fef2f2' : '#f0fdf4'),
+                color: type === 'pos' ? (v >= 50 ? '#4ade80' : '#f87171') : (v >= 50 ? '#f87171' : '#4ade80'),
+                background: type === 'pos' ? (v >= 50 ? '#061a0e' : '#1a0606') : (v >= 50 ? '#1a0606' : '#061a0e'),
               }}
             >
               {type === 'pos' ? (v >= 50 ? '↑' : '↓') : (v >= 50 ? '▲ RISK' : '✓')}
@@ -148,15 +154,9 @@ function AxisSummaryTable({ ms }: { ms: Record<string, number> }) {
 }
 
 function FreedomBurdenDistribution({
-  fdcr,
-  gfdcr,
-  metrics,
-  t,
+  fdcr, gfdcr, metrics, t,
 }: {
-  fdcr: number
-  gfdcr: number
-  metrics: Record<string, number>
-  t: (k: string) => string
+  fdcr: number; gfdcr: number; metrics: Record<string, number>; t: (k: string) => string
 }) {
   const diff = Math.round(fdcr - gfdcr)
   const tcr  = metrics['TCR']  ?? 50
@@ -166,32 +166,32 @@ function FreedomBurdenDistribution({
   const longTerm = Math.round(Math.max(0, fdcr - (tcr * 0.1) - (fgr * 0.08) - (eer * 0.07) + (hgr - 50) * 0.05))
 
   return (
-    <div className="border border-[#e2e8f0]">
-      <div className="grid grid-cols-3 divide-x divide-[#e2e8f0]">
+    <div className="border border-[#1e3a5a]">
+      <div className="grid grid-cols-3 divide-x divide-[#1e3a5a]">
         {[
           { label: 'Local FDCR', value: Math.round(fdcr), note: 'within-system' },
           { label: 'Global G-FDCR', value: Math.round(gfdcr), note: 'planetary scale' },
           { label: 'Long-Term Est.', value: longTerm, note: 'TCR + FGR + EER adjusted' },
         ].map(({ label, value, note }) => (
-          <div key={label} className="p-4 space-y-1">
-            <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">{label}</div>
+          <div key={label} className="p-4 space-y-1 bg-[#080e18]">
+            <div className="text-[10px] font-mono uppercase tracking-wide text-[#3a6a8a]">{label}</div>
             <div className="font-mono text-3xl font-bold leading-none" style={{ color: colorForPositive(value) }}>
               {value}
             </div>
-            <div className="text-[9px] text-gray-400">{note}</div>
+            <div className="text-[9px] text-[#3a6a8a]">{note}</div>
           </div>
         ))}
       </div>
       {diff > 20 && (
-        <div className="border-t border-[#e2e8f0] px-4 py-2 bg-amber-50">
-          <p className="text-[10px] text-amber-700 font-mono">
+        <div className="border-t border-[#1e3a5a] px-4 py-2 bg-[#1a0e00]">
+          <p className="text-[10px] text-[#f59e0b] font-mono">
             Δ +{diff} — Significant burden transfer gap. Local freedom-generation depends on planetary cost transfer.
           </p>
         </div>
       )}
       {fdcr > 70 && gfdcr < 45 && (
-        <div className="border-t border-[#e2e8f0] px-4 py-2 bg-amber-50">
-          <p className="text-[10px] text-amber-700 font-mono">
+        <div className="border-t border-[#1e3a5a] px-4 py-2 bg-[#1a0e00]">
+          <p className="text-[10px] text-[#f59e0b] font-mono">
             FLAG — Locally Freedom-Generative but Globally Burden-Transferring.
           </p>
         </div>
@@ -205,31 +205,31 @@ function TopFactorsPanel({ metrics, t }: { metrics: Record<string, number>; t: (
   const topRisk = [...ALL_RISK].sort((a, b) => (metrics[b] ?? 50) - (metrics[a] ?? 50)).slice(0, 3)
 
   return (
-    <div className="grid gap-px bg-[#e2e8f0] md:grid-cols-2 border border-[#e2e8f0]">
-      <div className="bg-white p-4 space-y-3">
+    <div className="grid gap-px bg-[#1e3a5a] md:grid-cols-2 border border-[#1e3a5a]">
+      <div className="bg-[#080e18] p-4 space-y-3">
         <SectionLabel>{t('dashboard.top_generating')}</SectionLabel>
         <div className="space-y-2">
           {topPos.map((id, rank) => (
             <div key={id} className="flex items-center gap-3">
-              <span className="font-mono text-[10px] text-gray-300 w-4 shrink-0">{rank + 1}</span>
-              <MiniBar value={metrics[id] ?? 50} color="#15803d" />
-              <span className="font-mono text-xs font-semibold text-[#15803d] w-8 text-right">{Math.round(metrics[id] ?? 50)}</span>
-              <span className="text-[10px] text-gray-500 w-32 truncate">{METRIC_LABELS[id] ?? id}</span>
-              <span className="font-mono text-[10px] font-bold text-[#1a3a5c] w-10 shrink-0">{id}</span>
+              <span className="font-mono text-[10px] text-[#2a5a7a] w-4 shrink-0">{rank + 1}</span>
+              <MiniBar value={metrics[id] ?? 50} color="#4ade80" />
+              <span className="font-mono text-xs font-semibold text-[#4ade80] w-8 text-right">{Math.round(metrics[id] ?? 50)}</span>
+              <span className="text-[10px] text-[#4a7a9a] w-32 truncate">{METRIC_LABELS[id] ?? id}</span>
+              <span className="font-mono text-[10px] font-bold text-[#7ac8f8] w-10 shrink-0">{id}</span>
             </div>
           ))}
         </div>
       </div>
-      <div className="bg-white p-4 space-y-3">
+      <div className="bg-[#080e18] p-4 space-y-3">
         <SectionLabel>{t('dashboard.top_closing')}</SectionLabel>
         <div className="space-y-2">
           {topRisk.map((id, rank) => (
             <div key={id} className="flex items-center gap-3">
-              <span className="font-mono text-[10px] text-gray-300 w-4 shrink-0">{rank + 1}</span>
-              <MiniBar value={metrics[id] ?? 50} color="#b91c1c" />
-              <span className="font-mono text-xs font-semibold text-[#b91c1c] w-8 text-right">{Math.round(metrics[id] ?? 50)}</span>
-              <span className="text-[10px] text-gray-500 w-32 truncate">{METRIC_LABELS[id] ?? id}</span>
-              <span className="font-mono text-[10px] font-bold text-[#1a3a5c] w-10 shrink-0">{id}</span>
+              <span className="font-mono text-[10px] text-[#2a5a7a] w-4 shrink-0">{rank + 1}</span>
+              <MiniBar value={metrics[id] ?? 50} color="#f87171" />
+              <span className="font-mono text-xs font-semibold text-[#f87171] w-8 text-right">{Math.round(metrics[id] ?? 50)}</span>
+              <span className="text-[10px] text-[#4a7a9a] w-32 truncate">{METRIC_LABELS[id] ?? id}</span>
+              <span className="font-mono text-[10px] font-bold text-[#7ac8f8] w-10 shrink-0">{id}</span>
             </div>
           ))}
         </div>
@@ -242,14 +242,14 @@ function ImprovementConditions({ metrics, fdcr, category, t }: { metrics: Record
   const applicable = IMPROVEMENT_RULES.filter((r) => r.check(metrics, category))
   if (applicable.length === 0 && fdcr >= 70) return null
   return (
-    <div className="border border-[#e2e8f0] p-4 space-y-3">
+    <div className="border border-[#1e3a5a] p-4 space-y-3 bg-[#080e18]">
       <SectionLabel>{t('dashboard.improvement')}</SectionLabel>
       {applicable.length === 0 ? (
-        <p className="text-xs text-gray-400 font-mono">No critical improvement conditions triggered at current thresholds.</p>
+        <p className="text-xs text-[#3a6a8a] font-mono">No critical improvement conditions triggered at current thresholds.</p>
       ) : (
         <div className="space-y-2">
           {applicable.map((r, i) => (
-            <div key={i} className="flex gap-3 text-xs text-gray-700 leading-relaxed border-l-2 border-amber-300 pl-3 py-0.5">
+            <div key={i} className="flex gap-3 text-xs text-[#94a3b8] leading-relaxed border-l-2 border-[#f59e0b] pl-3 py-0.5">
               {r.text}
             </div>
           ))}
@@ -259,18 +259,6 @@ function ImprovementConditions({ metrics, fdcr, category, t }: { metrics: Record
   )
 }
 
-// ── Tab definitions ────────────────────────────────────────────────────────────
-const TABS = [
-  { key: 'common.overview',      label: 'Case File Overview' },
-  { key: 'common.metrics',       label: 'Full Metric Audit' },
-  { key: 'common.actor_impact',  label: 'Actor Distribution' },
-  { key: 'common.global',        label: 'Global / Planetary' },
-  { key: 'common.scenarios',     label: 'Scenario Lab' },
-  { key: 'common.export',        label: 'Export' },
-]
-
-// ── Empty State: Research Console ─────────────────────────────────────────────
-
 function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
   t: (k: string) => string
   locale: string
@@ -279,54 +267,47 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
 }) {
   return (
     <div className="space-y-10">
-      {/* Header */}
-      <header className="border-b border-[#e2e8f0] pb-8 space-y-2">
-        <div className="text-[10px] uppercase tracking-widest text-gray-400">FEDS Studio</div>
-        <h1 className="text-3xl font-bold tracking-tight text-[#1a3a5c]">{t('console.title')}</h1>
-        <p className="text-sm text-gray-500 max-w-2xl">{t('console.subtitle')}</p>
+      <header className="border-b border-[#1e3a5a] pb-8 space-y-2">
+        <div className="text-[9px] uppercase tracking-widest text-[#3a6a8a]">FEDS Studio</div>
+        <h1 className="text-3xl font-bold tracking-tight text-[#7ac8f8]">{t('console.title')}</h1>
+        <p className="text-sm text-[#4a7a9a] max-w-2xl">{t('console.subtitle')}</p>
       </header>
 
-      {/* Philosophical Notice — explicit quotes */}
-      <section className="border border-[#e2e8f0] p-5 space-y-3 bg-[#f8fafc]">
-        <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400">Audit Axioms</div>
-        <p className="text-xs leading-relaxed text-gray-700">
-          {t('console.notice.no_persons')}
-        </p>
-        <p className="text-xs leading-relaxed text-gray-700">
-          {t('console.notice.not_absolute')}
-        </p>
+      <section className="border border-[#1e3a5a] p-5 space-y-3 bg-[#0a1220]">
+        <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">Audit Axioms</div>
+        <p className="text-xs leading-relaxed text-[#7a98b4]">{t('console.notice.no_persons')}</p>
+        <p className="text-xs leading-relaxed text-[#7a98b4]">{t('console.notice.not_absolute')}</p>
       </section>
 
-      {/* Canonical Case Files */}
       <section className="space-y-4">
         <div className="flex items-baseline justify-between">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400 mb-1">{t('console.case_files')}</div>
-            <p className="text-xs text-gray-500 max-w-2xl">{t('console.case_files.desc')}</p>
+            <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a] mb-1">{t('console.case_files')}</div>
+            <p className="text-xs text-[#4a7a9a] max-w-2xl">{t('console.case_files.desc')}</p>
           </div>
           <Link
             href="/audit"
-            className="shrink-0 text-[10px] font-mono border border-[#1a3a5c] px-3 py-1.5 text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
+            className="shrink-0 text-[9px] font-mono border border-[#2a5a8a] px-3 py-1.5 text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors"
           >
             {t('app.begin_audit')} →
           </Link>
         </div>
 
-        <div className="space-y-px border border-[#e2e8f0]">
+        <div className="space-y-px border border-[#1e3a5a]">
           {demoCases.map((dc) => (
-            <div key={dc.id} className="bg-white border-b border-[#e2e8f0] last:border-0 p-5 space-y-3">
+            <div key={dc.id} className="bg-[#080e18] border-b border-[#1e3a5a] last:border-0 p-5 space-y-3">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-0.5">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+                  <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">
                     {t('console.case_file')} {dc.caseNumber}
                   </div>
-                  <h3 className="text-sm font-bold text-[#1a3a5c]">
+                  <h3 className="text-sm font-bold text-[#7ac8f8]">
                     {locale === 'ja' ? dc.labelJa : dc.label}
                   </h3>
                 </div>
                 <button
                   onClick={() => loadDemoCase(dc.id)}
-                  className="shrink-0 text-[10px] font-mono bg-[#1a3a5c] px-4 py-2 text-white hover:bg-[#0f2440] transition-colors"
+                  className="shrink-0 text-[9px] font-mono border border-[#4a8abb] px-4 py-2 text-[#4a8abb] hover:bg-[#0f2535] hover:text-[#7ac8f8] transition-colors"
                 >
                   {t('console.open_case_file')}
                 </button>
@@ -334,14 +315,14 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
 
               <div className="grid gap-3 md:grid-cols-2">
                 <div className="space-y-1">
-                  <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">{t('console.central_tension')}</div>
-                  <p className="text-xs text-gray-600 leading-relaxed">
+                  <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a]">{t('console.central_tension')}</div>
+                  <p className="text-xs text-[#7a98b4] leading-relaxed">
                     {locale === 'ja' ? dc.centralTensionJa : dc.centralTension}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">{t('console.primary_question')}</div>
-                  <p className="text-xs text-gray-600 leading-relaxed">
+                  <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a]">{t('console.primary_question')}</div>
+                  <p className="text-xs text-[#7a98b4] leading-relaxed">
                     {locale === 'ja' ? dc.primaryQuestionJa : dc.primaryQuestion}
                   </p>
                 </div>
@@ -351,11 +332,10 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
         </div>
       </section>
 
-      {/* Spatial-Planetary Simulation Access */}
-      <section className="border border-[#e2e8f0] p-5 space-y-4">
+      <section className="border border-[#1e3a5a] p-5 space-y-4 bg-[#080e18]">
         <div>
-          <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400 mb-1">{t('console.simulation.title')}</div>
-          <p className="text-xs text-gray-500 max-w-2xl">{t('console.simulation.desc')}</p>
+          <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a] mb-1">{t('console.simulation.title')}</div>
+          <p className="text-xs text-[#4a7a9a] max-w-2xl">{t('console.simulation.desc')}</p>
         </div>
         <div className="grid gap-2 sm:grid-cols-3">
           {[
@@ -366,7 +346,7 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
             <a
               key={key}
               href={href}
-              className="border border-[#e2e8f0] px-4 py-3 text-[10px] font-mono text-[#1a3a5c] hover:border-[#1a3a5c] hover:bg-[#f0f4f8] transition-colors block"
+              className="border border-[#1e3a5a] px-4 py-3 text-[9px] font-mono text-[#4a8abb] hover:border-[#4a8abb] hover:text-[#7ac8f8] transition-colors block"
             >
               {t(key)} →
             </a>
@@ -374,14 +354,13 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
         </div>
       </section>
 
-      {/* Methodological Notes */}
-      <section className="border border-[#e2e8f0] p-5 space-y-3">
-        <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{t('console.methodological_notes')}</div>
+      <section className="border border-[#1e3a5a] p-5 space-y-3 bg-[#080e18]">
+        <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">{t('console.methodological_notes')}</div>
         <div className="space-y-2">
           {(['console.method_note.1', 'console.method_note.2', 'console.method_note.3'] as const).map((k, i) => (
             <div key={k} className="flex gap-3">
-              <span className="font-mono text-[10px] text-gray-300 shrink-0 pt-0.5">{String(i + 1).padStart(2, '0')}</span>
-              <p className="text-xs text-gray-600 leading-relaxed">{t(k)}</p>
+              <span className="font-mono text-[10px] text-[#2a5a7a] shrink-0 pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+              <p className="text-xs text-[#7a98b4] leading-relaxed">{t(k)}</p>
             </div>
           ))}
         </div>
@@ -390,50 +369,37 @@ function ConsoleEmptyState({ t, locale, loadDemoCase, demoCases }: {
   )
 }
 
-// ── Main export ────────────────────────────────────────────────────────────────
-
 export default function ResearchConsolePage() {
   const { scoreResult, t, locale, loadDemoCase, demoCases, auditState } = useAudit()
   const [tab, setTab] = useState(0)
 
-  // Auto-load Case 001 so the console always opens with substantive content
   useEffect(() => {
     if (!scoreResult) loadDemoCase('ai_hiring')
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!scoreResult) {
-    return (
-      <ConsoleEmptyState
-        t={t}
-        locale={locale}
-        loadDemoCase={loadDemoCase}
-        demoCases={demoCases}
-      />
-    )
+    return <ConsoleEmptyState t={t} locale={locale} loadDemoCase={loadDemoCase} demoCases={demoCases} />
   }
 
   const ms = scoreResult.metrics as unknown as Record<string, number>
-
-  // Find matching demo case (if any)
   const activeCase = demoCases.find((dc) => dc.state.target === auditState.target)
 
   return (
     <div id="dashboard-capture" className="space-y-8">
 
-      {/* ── Case File Header ───────────────────────────────────────────────── */}
-      <header className="border-b border-[#e2e8f0] pb-6 space-y-2">
+      <header className="border-b border-[#1e3a5a] pb-6 space-y-2">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="space-y-1">
-            <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+            <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">
               {activeCase
                 ? `${t('console.case_file')} ${activeCase.caseNumber} — ${t('console.loaded.header')}`
                 : `${t('console.loaded.custom')} — ${t('console.loaded.header')}`}
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-[#1a3a5c]">
+            <h1 className="text-2xl font-bold tracking-tight text-[#7ac8f8]">
               {locale === 'ja' && activeCase ? activeCase.labelJa : activeCase?.label ?? auditState.target}
             </h1>
             {auditState.category && (
-              <p className="text-xs text-gray-400 font-mono">
+              <p className="text-xs text-[#3a6a8a] font-mono">
                 {auditState.category}
                 {auditState.layers.length > 0 && ` · ${auditState.layers.length} layers`}
               </p>
@@ -442,100 +408,94 @@ export default function ResearchConsolePage() {
           <div className="flex gap-2 flex-wrap shrink-0">
             <Link
               href="/report"
-              className="text-[10px] font-mono border border-[#1a3a5c] px-3 py-1.5 text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white transition-colors"
+              className="text-[9px] font-mono border border-[#2a5a8a] px-3 py-1.5 text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors"
             >
               {t('console.loaded.open_dossier')}
             </Link>
             <Link
               href="/scenarios"
-              className="text-[10px] font-mono border border-[#e2e8f0] px-3 py-1.5 text-gray-600 hover:border-[#1a3a5c] hover:text-[#1a3a5c] transition-colors"
+              className="text-[9px] font-mono border border-[#1e3a5a] px-3 py-1.5 text-[#3a6a8a] hover:border-[#4a8abb] hover:text-[#7ac8f8] transition-colors"
             >
               {t('console.loaded.open_lab')}
             </Link>
             <Link
               href="/audit"
-              className="text-[10px] font-mono border border-[#e2e8f0] px-3 py-1.5 text-gray-600 hover:border-[#1a3a5c] hover:text-[#1a3a5c] transition-colors"
+              className="text-[9px] font-mono border border-[#1e3a5a] px-3 py-1.5 text-[#3a6a8a] hover:border-[#4a8abb] hover:text-[#7ac8f8] transition-colors"
             >
               {t('console.loaded.new_audit')}
             </Link>
           </div>
         </div>
 
-        {/* Corrections */}
         {scoreResult.corrections.length > 0 && (
-          <div className="border border-amber-200 bg-amber-50 px-4 py-2 mt-2">
-            <div className="text-[10px] font-mono uppercase tracking-wide text-amber-600 mb-1">Correction Rules Applied</div>
+          <div className="border border-[#3a2a00] bg-[#1a1000] px-4 py-2 mt-2">
+            <div className="text-[9px] font-mono uppercase tracking-wide text-[#f59e0b] mb-1">Correction Rules Applied</div>
             <ul className="space-y-0.5">
               {scoreResult.corrections.map((c, i) => (
-                <li key={i} className="text-[10px] font-mono text-amber-700">▸ {c}</li>
+                <li key={i} className="text-[10px] font-mono text-[#fbbf24]">▸ {c}</li>
               ))}
             </ul>
           </div>
         )}
       </header>
 
-      {/* ── Central Audit Question ─────────────────────────────────────────── */}
       {activeCase && (
-        <section className="border border-[#e2e8f0] p-5 space-y-4">
-          <div className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{t('console.loaded.audit_question')}</div>
-          <p className="text-sm font-medium text-gray-800 leading-relaxed max-w-3xl">
+        <section className="border border-[#1e3a5a] p-5 space-y-4 bg-[#080e18]">
+          <div className="text-[9px] font-mono uppercase tracking-widest text-[#3a6a8a]">{t('console.loaded.audit_question')}</div>
+          <p className="text-sm font-medium text-[#cbd5e1] leading-relaxed max-w-3xl">
             {locale === 'ja' ? activeCase.primaryQuestionJa : activeCase.primaryQuestion}
           </p>
-          <div className="border-t border-[#e2e8f0] pt-3">
-            <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400 mb-1">{t('console.loaded.contradiction')}</div>
-            <p className="text-xs text-gray-600">
+          <div className="border-t border-[#1e3a5a] pt-3">
+            <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a] mb-1">{t('console.loaded.contradiction')}</div>
+            <p className="text-xs text-[#7a98b4]">
               {locale === 'ja' ? activeCase.centralTensionJa : activeCase.centralTension}
             </p>
           </div>
         </section>
       )}
 
-      {/* ── Audit Axis Summary ─────────────────────────────────────────────── */}
       <section className="space-y-3">
         <SectionLabel>{t('console.loaded.axis_summary')}</SectionLabel>
         <AxisSummaryTable ms={ms} />
       </section>
 
-      {/* ── Distribution of Freedom and Burden ────────────────────────────── */}
       <section className="space-y-3">
         <SectionLabel>{t('console.loaded.distribution')}</SectionLabel>
         <FreedomBurdenDistribution fdcr={scoreResult.fdcr} gfdcr={scoreResult.gfdcr} metrics={ms} t={t} />
       </section>
 
-      {/* ── Burden Transfer Pathways ───────────────────────────────────────── */}
       <section className="space-y-3">
         <SectionLabel>{t('console.loaded.burden_pathways')}</SectionLabel>
         {scoreResult.burdenTransfers.length > 0 ? (
           <BurdenTransferMatrix />
         ) : (
-          <p className="text-xs text-gray-400 font-mono border border-[#e2e8f0] px-4 py-3">
+          <p className="text-xs text-[#3a6a8a] font-mono border border-[#1e3a5a] px-4 py-3 bg-[#080e18]">
             {t('console.loaded.no_burden')}
           </p>
         )}
       </section>
 
-      {/* ── FDCR / G-FDCR Research Indicators ─────────────────────────────── */}
       <section className="space-y-3">
         <SectionLabel>{t('console.loaded.indicators')}</SectionLabel>
-        <div className="grid gap-px bg-[#e2e8f0] sm:grid-cols-3 border border-[#e2e8f0]">
-          <div className="bg-white p-5 space-y-1">
-            <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">FDCR</div>
+        <div className="grid gap-px bg-[#1e3a5a] sm:grid-cols-3 border border-[#1e3a5a]">
+          <div className="bg-[#080e18] p-5 space-y-1">
+            <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a]">FDCR</div>
             <div className="font-mono text-4xl font-bold leading-none" style={{ color: colorForPositive(scoreResult.fdcr) }}>
               {Math.round(scoreResult.fdcr)}
             </div>
-            <div className="text-[10px] text-gray-400">Freedom Dialectical Correctness Rate</div>
+            <div className="text-[9px] text-[#3a6a8a]">Freedom Dialectical Correctness Rate</div>
           </div>
-          <div className="bg-white p-5 space-y-1">
-            <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">G-FDCR</div>
+          <div className="bg-[#080e18] p-5 space-y-1">
+            <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a]">G-FDCR</div>
             <div className="font-mono text-4xl font-bold leading-none" style={{ color: colorForPositive(scoreResult.gfdcr) }}>
               {Math.round(scoreResult.gfdcr)}
             </div>
-            <div className="text-[10px] text-gray-400">Global Freedom Dialectical Correctness Rate</div>
+            <div className="text-[9px] text-[#3a6a8a]">Global Freedom Dialectical Correctness Rate</div>
           </div>
-          <div className="bg-white p-5 space-y-2">
-            <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">{t('common.judgment')}</div>
+          <div className="bg-[#080e18] p-5 space-y-2">
+            <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a]">{t('common.judgment')}</div>
             {scoreResult.judgments.map((j) => (
-              <div key={j} className="border border-[#e2e8f0] bg-[#f8fafc] px-2 py-1 text-[10px] font-mono text-[#1a3a5c]">
+              <div key={j} className="border border-[#1e3a5a] bg-[#0a1220] px-2 py-1 text-[9px] font-mono text-[#7ac8f8]">
                 {t(`judgment.${j}`)}
               </div>
             ))}
@@ -543,72 +503,68 @@ export default function ResearchConsolePage() {
         </div>
       </section>
 
-      {/* ── Ecological Research Indicators ────────────────────────────────── */}
       {scoreResult.ecoScores && (
         <section className="space-y-3">
           <SectionLabel>Ecological Research Indicators — EBDCR / EBDE / E-FDCR / EP-BTM</SectionLabel>
-          <div className="grid gap-px bg-[#e2e8f0] sm:grid-cols-4 border border-[#e2e8f0]">
+          <div className="grid gap-px bg-[#1e3a5a] sm:grid-cols-4 border border-[#1e3a5a]">
             {[
               { label: 'E-FDCR', value: scoreResult.ecoScores['E-FDCR'], full: t('eco.efdcr.full'), risk: false },
               { label: 'EBDCR',  value: scoreResult.ecoScores.EBDCR,     full: t('eco.ebdcr.full'), risk: false },
               { label: 'EBDE',   value: scoreResult.ecoScores.EBDE,      full: t('eco.ebde.full'),  risk: false },
               { label: 'EP-BTM', value: scoreResult.ecoScores['EP-BTM'], full: t('eco.epbtm.full'), risk: true  },
             ].map(({ label, value, full, risk }) => (
-              <div key={label} className="bg-white p-4 space-y-1">
-                <div className="text-[10px] font-mono uppercase tracking-wide text-gray-400">{label}</div>
+              <div key={label} className="bg-[#080e18] p-4 space-y-1">
+                <div className="text-[9px] font-mono uppercase tracking-wide text-[#3a6a8a]">{label}</div>
                 <div
                   className="font-mono text-3xl font-bold leading-none"
                   style={{ color: risk
-                    ? (value > 65 ? '#b91c1c' : value > 45 ? '#d97706' : '#15803d')
-                    : (value > 60 ? '#15803d' : value > 40 ? '#d97706' : '#b91c1c') }}
+                    ? (value > 65 ? '#f87171' : value > 45 ? '#fbbf24' : '#4ade80')
+                    : (value > 60 ? '#4ade80' : value > 40 ? '#fbbf24' : '#f87171') }}
                 >
                   {Math.round(value)}
                 </div>
-                <div className="text-[9px] text-gray-400">{full}</div>
+                <div className="text-[9px] text-[#3a6a8a]">{full}</div>
               </div>
             ))}
           </div>
           {scoreResult.ecoScores.ecoJudgments.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {scoreResult.ecoScores.ecoJudgments.map((j) => (
-                <div key={j} className="text-[10px] font-mono border border-[#d1e7d1] bg-[#f0fdf0] px-2 py-1 text-[#1a6a1a]">
+                <div key={j} className="text-[9px] font-mono border border-[#1e5a1e] bg-[#061a0e] px-2 py-1 text-[#4ade80]">
                   {t(`judgment.${j}`)}
                 </div>
               ))}
             </div>
           )}
           {scoreResult.ecoScores.ecoCorrections.length > 0 && (
-            <div className="border border-amber-200 bg-amber-50 px-4 py-2">
+            <div className="border border-[#3a2a00] bg-[#1a1000] px-4 py-2">
               {scoreResult.ecoScores.ecoCorrections.map((c, i) => (
-                <div key={i} className="text-[10px] font-mono text-amber-700">▸ {c}</div>
+                <div key={i} className="text-[9px] font-mono text-[#fbbf24]">▸ {c}</div>
               ))}
             </div>
           )}
           <a
             href="/simulation"
-            className="inline-block text-[10px] font-mono border border-[#e2e8f0] px-4 py-2 text-[#1a3a5c] hover:border-[#1a3a5c] transition-colors"
+            className="inline-block text-[9px] font-mono border border-[#1e3a5a] px-4 py-2 text-[#4a8abb] hover:border-[#4a8abb] hover:text-[#7ac8f8] transition-colors"
           >
             {t('sim.title')} →
           </a>
         </section>
       )}
 
-      {/* ── Top Factors ───────────────────────────────────────────────────── */}
       <TopFactorsPanel metrics={ms} t={t} />
 
-      {/* ── Improvement Conditions ────────────────────────────────────────── */}
       <ImprovementConditions metrics={ms} fdcr={scoreResult.fdcr} category={scoreResult.report.category} t={t} />
 
-      {/* ── Tabs ──────────────────────────────────────────────────────────── */}
-      <div className="border-b border-[#e2e8f0] flex flex-wrap gap-0">
+      <div className="border-b border-[#1e3a5a] flex flex-wrap gap-0">
         {TABS.map(({ key, label }, i) => (
           <button
             key={key}
             onClick={() => setTab(i)}
             className={`px-4 py-2.5 text-xs font-mono border-b-2 transition-colors ${
               i === tab
-                ? 'border-[#1a3a5c] text-[#1a3a5c]'
-                : 'border-transparent text-gray-400 hover:text-gray-700'
+                ? 'border-[#4a8abb] text-[#7ac8f8]'
+                : 'border-transparent text-[#3a6a8a] hover:text-[#7ac8f8]'
             }`}
           >
             {label}
@@ -616,7 +572,6 @@ export default function ResearchConsolePage() {
         ))}
       </div>
 
-      {/* Tab 0: Overview */}
       {tab === 0 && (
         <div className="space-y-6">
           <div className="space-y-3">
@@ -626,7 +581,6 @@ export default function ResearchConsolePage() {
         </div>
       )}
 
-      {/* Tab 1: Full Metric Audit */}
       {tab === 1 && (
         <div className="space-y-8">
           <div className="space-y-3">
@@ -648,7 +602,6 @@ export default function ResearchConsolePage() {
         </div>
       )}
 
-      {/* Tab 2: Actor Distribution */}
       {tab === 2 && (
         <div className="space-y-6">
           <div className="space-y-3">
@@ -662,15 +615,14 @@ export default function ResearchConsolePage() {
         </div>
       )}
 
-      {/* Tab 3: Global / Planetary */}
       {tab === 3 && (
         <div className="space-y-6">
           {scoreResult.globalFlags.length > 0 && (
-            <div className="border border-amber-200 bg-amber-50 p-4">
-              <div className="text-[10px] font-mono uppercase tracking-wide text-amber-600 mb-2">{t('dashboard.global_flags')}</div>
+            <div className="border border-[#3a2a00] bg-[#1a1000] p-4">
+              <div className="text-[9px] font-mono uppercase tracking-wide text-[#f59e0b] mb-2">{t('dashboard.global_flags')}</div>
               <ul className="space-y-1">
                 {scoreResult.globalFlags.map((g, i) => (
-                  <li key={i} className="text-xs text-gray-700 font-mono">▸ {g}</li>
+                  <li key={i} className="text-xs text-[#94a3b8] font-mono">▸ {g}</li>
                 ))}
               </ul>
             </div>
@@ -690,14 +642,12 @@ export default function ResearchConsolePage() {
         </div>
       )}
 
-      {/* Tab 4: Scenario Lab */}
       {tab === 4 && <ScenarioComparison />}
 
-      {/* Tab 5: Export */}
       {tab === 5 && (
         <div className="space-y-4">
           <ExportButtons captureId="dashboard-capture" />
-          <Link href="/report" className="inline-block text-xs font-mono text-[#1a3a5c] hover:underline">
+          <Link href="/report" className="inline-block text-xs font-mono text-[#4a8abb] hover:text-[#7ac8f8] hover:underline">
             {t('dossier.title')} →
           </Link>
         </div>

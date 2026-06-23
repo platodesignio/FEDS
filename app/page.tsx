@@ -172,11 +172,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Related Instrument */}
+      <section className="border-t border-[#0f1e30] py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#2a5a8a] mb-6">Related Instrument</div>
+          <div className="border border-[#1e3a5a] bg-[#080e18] p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-6 max-w-xl">
+            <div className="space-y-2">
+              <p className="text-xs font-bold text-[#7ac8f8] tracking-wide">Proper Paper Audit</p>
+              <p className="text-[11px] text-[#3a6a8a] leading-relaxed max-w-sm">
+                Audit whether a research text generates concepts, survives public reason, and avoids becoming a scoring apparatus.
+              </p>
+              <p className="text-[10px] font-mono text-[#1e3a5a]">
+                Separate product · Same audit philosophy family
+              </p>
+            </div>
+            <a
+              href="http://localhost:3001"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 text-[10px] font-mono border border-[#2a5a8a] px-4 py-2 text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors self-start"
+            >
+              Open Proper Paper Audit →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer notice */}
       <footer className="border-t border-[#0f1e30] py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-3">
           <p className="text-[10px] font-mono text-[#1e3a5a] leading-relaxed max-w-2xl">
             {t('console.notice.no_persons')} {t('console.notice.not_absolute')}
+          </p>
+          <p className="text-[10px] font-mono text-[#131f2e] leading-relaxed">
+            Part of an independent audit philosophy tool family.
           </p>
         </div>
       </footer>

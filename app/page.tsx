@@ -187,7 +187,7 @@ export default function Home() {
               </p>
             </div>
             <a
-              href="http://localhost:3001"
+              href="https://ppa-plum.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
               className="shrink-0 text-[10px] font-mono border border-[#2a5a8a] px-4 py-2 text-[#4a8abb] hover:border-[#7ac8f8] hover:text-[#7ac8f8] transition-colors self-start"
